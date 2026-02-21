@@ -1,0 +1,184 @@
+/* ===== VARIABLE DEFINITIONS ===== */
+:root {
+    --color-learning: #ffcc00;
+    --color-platforms: #00ccff;
+    --color-ai: #a366ff;
+    --color-credits: #ff66aa;
+    --color-assets: #00ff41;
+    --pixel-gold: #ffcc00;
+}
+
+/* ===== CORE LAYOUT ===== */
+body {
+    background-color: #0a0a0a;
+    color: white;
+    font-family: 'Courier New', monospace;
+    overflow-x: hidden;
+    padding-bottom: 50px;
+}
+
+[v-cloak] { display: none !important; }
+
+.rpg-title {
+    font-family: 'Press Start 2P', cursive;
+    color: var(--pixel-gold);
+    text-shadow: 4px 4px 0px #552200;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* ===== GRID & CONTAINER ===== */
+.container {
+    max-width: 1200px;
+    margin-top: 50px;
+}
+
+.pixel-card-container {
+    perspective: 1000px;
+    height: 400px;
+    width: 280px; 
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+
+.pixel-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.pixel-card.is-flipped {
+    transform: rotateY(180deg);
+}
+
+/* ===== CARD FACES ===== */
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    background: #111;
+    border: 4px solid #444;
+}
+
+/* Back Face Design */
+.card-back {
+    background: #1a1a1a;
+    background-image: repeating-linear-gradient(45deg, #222 25%, transparent 25%, transparent 75%, #222 75%, #222), 
+                      repeating-linear-gradient(45deg, #222 25%, #1a1a1a 25%, #1a1a1a 75%, #222 75%, #222);
+    background-size: 20px 20px;
+    justify-content: center;
+}
+
+.center-logo {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 3.5rem;
+    color: #333;
+}
+
+/* Front Face Design */
+.card-front {
+    transform: rotateY(180deg);
+    text-align: center;
+}
+
+/* ===== CATEGORY GLOWS & BORDERS ===== */
+.pixel-card.learning .card-face { border-color: var(--color-learning); box-shadow: 0 0 15px rgba(255, 204, 0, 0.2); }
+.pixel-card.platforms .card-face { border-color: var(--color-platforms); box-shadow: 0 0 15px rgba(0, 204, 255, 0.2); }
+.pixel-card.ai .card-face { border-color: var(--color-ai); box-shadow: 0 0 15px rgba(163, 102, 255, 0.2); }
+.pixel-card.credits .card-face { border-color: var(--color-credits); box-shadow: 0 0 15px rgba(255, 102, 170, 0.2); }
+.pixel-card.assets .card-face { border-color: var(--color-assets); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
+
+/* ===== CARD CONTENT ===== */
+.card-type-label {
+    background: #000;
+    padding: 4px 10px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5rem;
+    border: 1px solid #444;
+}
+
+.icon-frame {
+    font-size: 2.5rem;
+    background: rgba(255,255,255,0.03);
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #333;
+    margin: 15px 0;
+}
+
+.item-name {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.75rem;
+    color: #fff;
+    line-height: 1.4;
+}
+
+.item-desc {
+    font-size: 0.8rem;
+    color: #888;
+    line-height: 1.4;
+    margin: 10px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ===== TABS & BUTTONS ===== */
+.pixel-tab {
+    background: #111;
+    border: 2px solid #333;
+    color: #666;
+    padding: 12px 20px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.65rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.pixel-tab:hover { color: #fff; border-color: #555; }
+
+.pixel-tab.active-tab {
+    border-color: #fff;
+    color: #fff;
+    background: #222;
+}
+
+.pixel-btn {
+    background: #fff;
+    color: #000;
+    width: 100%;
+    padding: 12px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6rem;
+    text-decoration: none;
+    display: block;
+    transition: 0.2s;
+}
+
+.pixel-btn:hover {
+    background: var(--pixel-gold);
+    transform: scale(1.05);
+    color: #000;
+}
+
+.back-link {
+    color: #555;
+    text-decoration: none;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem;
+}
+
+.back-link:hover { color: var(--color-ai); }
