@@ -788,56 +788,93 @@
   
 
   <!-- ================= GUEST BOOK ================= -->
-  <section id="guestbook" class="py-5 min-vh-100 bg-black text-white">
-    <div class="container" v-cloak>
-      <h2 class="rpg-title text-center mb-5">GUILD SIGN-IN SHEET</h2>
+<section id="guestbook" class="py-5 min-vh-100 bg-black text-white">
+  <div class="container" v-cloak>
+    <h2 class="rpg-title text-center mb-5">GUILD SIGN-IN SHEET</h2>
 
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <div class="terminal-window p-4 mb-4">
-            <div class="window-top p-2">NEW ENTRY: SIGN THE LEDGER</div>
-            <form @submit.prevent="addEntry" class="p-1 p-md-3">
-              <div class="mb-3">
-                <label class="form-label quest-label">TRAVELER NAME</label>
-                <input v-model="newName" type="text" class="rpg-input w-100" placeholder="Enter Hero Name..." required>
+    <div class="row justify-content-center g-5">
+      <div class="col-md-6">
+        <div class="terminal-window p-4 mb-4">
+          <div class="window-top p-2">NEW ENTRY: SIGN THE LEDGER</div>
+          <form @submit.prevent="addEntry" class="p-1 p-md-3">
+            
+            <div class="d-flex align-items-center mb-4 gap-3 p-3 bg-dark border-pixel">
+              <div class="avatar-preview-box">
+                 <img :src="selectedAvatar" alt="Preview" class="pixel-avatar-lg">
               </div>
-              <div class="mb-4"> <label class="form-label quest-label">MESSAGE</label>
-                <textarea v-model="newMessage" class="rpg-input w-100" rows="3" placeholder="Leave a word for the dev..." required></textarea>
+              <div>
+                <label class="quest-label d-block">CHOSEN CLASS</label>
+                <span class="text-warning font-press-start" style="font-size: 0.8rem;">{{ selectedClass.toUpperCase() }}</span>
               </div>
-              
-              <button type="submit" 
-                      class="rpg-btn-gold" 
-                      :class="{ 'success-state': submitted }" 
-                      :disabled="submitted">
-                      
-                <span v-if="!submitted">SIGN LEDGER</span>
-                
-                <span v-else>
-                  <span class="checkmark">✔</span> QUEST COMPLETE!
-                </span>
-              </button>
-            </form>
-          </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label quest-label">TRAVELER NAME</label>
+              <input v-model="newName" type="text" class="rpg-input w-100" placeholder="Enter Hero Name..." required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label quest-label">SELECT YOUR CLASS</label>
+              <div class="d-flex flex-wrap gap-2 mt-2">
+                <button v-for="job in classes" 
+                        :key="job.name"
+                        type="button"
+                        class="pixel-tab-sm"
+                        :class="{ 'active-tab': selectedClass === job.name }"
+                        @click="selectClass(job)">
+                  {{ job.icon }} {{ job.name }}
+                </button>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label quest-label">MESSAGE</label>
+              <textarea v-model="newMessage" class="rpg-input w-100" rows="3" placeholder="Leave a word for the dev..." required></textarea>
+            </div>
+            
+            <button type="submit" 
+                    class="rpg-btn-gold w-100" 
+                    :class="{ 'success-state': submitted }" 
+                    :disabled="submitted">
+              <span v-if="!submitted">SIGN LEDGER</span>
+              <span v-else>✔ QUEST COMPLETE!</span>
+            </button>
+          </form>
         </div>
+      </div>
 
-        <div class="col-md-5">
-          <div class="ledger-box">
-            <h3 class="stat-header mb-3">RECENT VISITORS</h4>
-            <div class="visitor-list">
-              <div v-for="(entry, index) in entries" :key="index" class="visitor-card mb-3 p-2 border-bottom border-secondary">
-                <div class="d-flex justify-content-between">
-                  <span class="visitor-name text-warning">> {{ entry.name }}</span>
-                  <span class="visitor-date" style="font-size: 0.6rem;">{{ entry.date }}</span>
+      <div class="col-md-5">
+        <div class="ledger-box p-4 border-pixel">
+          <h3 class="stat-header mb-4">RECENT VISITORS</h3>
+          <div class="visitor-list custom-scrollbar" style="max-height: 600px; overflow-y: auto;">
+            <div v-for="(entry, index) in entries" 
+                 :key="index" 
+                 class="visitor-card mb-3 p-3"
+                 :class="'border-class-' + (entry.desired_class || 'novice').toLowerCase()">
+              
+              <div class="d-flex gap-3">
+                <img :src="entry.avatar_url" class="pixel-avatar-sm" alt="Class Icon">
+                <div class="w-100">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="visitor-name text-warning">> {{ entry.name }}</span>
+                    <span class="visitor-class-tag">{{ entry.desired_class }}</span>
+                  </div>
+                  <p class="visitor-msg mt-2 mb-1">"{{ entry.message }}"</p>
+                  <div class="text-end">
+                    <span class="visitor-date text-secondary">{{ formatDate(entry.created_at) }}</span>
+                  </div>
                 </div>
-                <p class="visitor-msg mb-0 mt-1" style="font-size: 0.8rem;">"{{ entry.message }}"</p>
               </div>
-              <div v-if="entries.length === 0" class="text-secondary text-center">No one has signed yet...</div>
+            </div>
+            <div v-if="entries.length === 0" class="text-secondary text-center py-5">
+              The ledger is empty. Be the first to join the guild.
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section> 
+  </div>
+</section>
 
   <!-- SPAWN ANCHOR BUTTON-->
   <div id="scroll-to-top" class="spawn-anchor">
