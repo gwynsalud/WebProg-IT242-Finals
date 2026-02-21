@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Codex: The Scholar's Deck</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/resources.css">
+    <style>
+        [v-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-black text-white">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div id="resources-app" v-cloak class="container py-5">
+    <h2 class="rpg-title text-center mb-4">THE SCHOLAR'S DECK</h2>
+
+    <div class="category-menu d-flex flex-wrap justify-content-center gap-2 mb-5">
+        <button v-for="cat in ['learning', 'platforms', 'ai', 'credits', 'assets']" 
+                @click="filter = cat" 
+                :class="{'active-tab': filter === cat}" 
+                class="pixel-tab">
+            {{ cat.toUpperCase() }}
+        </button>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <div v-for="(item, index) in filteredResources" 
+             :key="index" 
+             class="col-12 col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center"> 
+            
+            <div class="pixel-card-container" @click="item.flipped = !item.flipped">
+                <div class="pixel-card" :class="[{ 'is-flipped': item.flipped }, item.category]">
+                    
+                    <div class="card-face card-back">
+                        <div class="center-logo">?</div>
+                    </div>
+
+                    <div class="card-face card-front">
+                        <div class="card-type-label">{{ item.category.toUpperCase() }}</div>
+                        <div class="icon-frame">{{ item.icon }}</div>
+                        <h4 class="item-name">{{ item.name }}</h4>
+                        <p class="item-desc">{{ item.desc }}</p>
+                        <a :href="item.url" target="_blank" class="pixel-btn" @click.stop>OPEN LINK</a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center mt-5">
+        <a href="index.html" class="back-link">← RETURN TO MAIN CAMPAIGN</a>
+    </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="js/resources.js"></script>
+</body>
+</html>
