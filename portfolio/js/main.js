@@ -47,21 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
 
-        computed: {
-            // Translates filenames to cool RPG Location Names for the Pause Menu
-            currentPageName() {
-                const map = {
-                    'index.html': 'MAIN TAVERN',
-                    'profile.html': 'HERO STATS',
-                    'quests.html': 'ADVENTURE LOG',
-                    'guild.html': 'GUILD HALL',
-                    'library.html': 'FORBIDDEN LIBRARY',
-                    'bouncer.html': 'TAVERN FLOOR'
-                };
-                return map[this.currentPage] || 'UNKNOWN REALM';
-            }
-        },
-
         async mounted() {
             // A. INITIALIZATION
             this.checkInitialLock();
@@ -72,15 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.initRealtimeListener();
             }
 
-            // C. KEYBOARD SHORTCUTS (Pause Menu)
-            window.addEventListener('keydown', (e) => {
-                const isTyping = ['INPUT', 'TEXTAREA'].includes(e.target.tagName);
-                if (!isTyping && (e.key === 'Escape' || e.key.toLowerCase() === 'p')) {
-                    this.togglePause();
-                }
-            });
-
-            // D. UI HELPERS
+            // C. UI HELPERS
             this.$nextTick(() => {
                 if (this.currentPage === 'profile.html') {
                     this.initSkillHoverEffects();
@@ -90,14 +67,25 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         methods: {
-            // --- GLOBAL ENGINE METHODS ---
+            // --- GLOBAL NAVIGATION & ENGINE ---
 
             togglePause() {
-                // Lobby/Start screen shouldn't have a pause menu
-                if (this.currentPage === 'index.html' && !this.gameStarted) return;
-                
+                // Toggle the state
                 this.isPaused = !this.isPaused;
-                document.body.style.overflow = this.isPaused ? 'hidden' : '';
+                
+                // Control background scrolling
+                if (this.isPaused) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            },
+
+            // New navigation logic for multi-page use
+            navigateTo(url) {
+                this.isPaused = false;
+                document.body.style.overflow = '';
+                window.location.href = url;
             },
 
             checkInitialLock() {
@@ -112,6 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.gameStarted = true;
                 localStorage.setItem('site_unlocked', 'true');
                 document.body.classList.remove('scroll-locked');
+                // Auto-pause or jump to character selection if desired:
+                // window.location.href = "#characters";
             },
 
             selectClass(job) {
@@ -134,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         localStorage.setItem('scholar_trial_passed', 'true');
                     }
                 } else {
-                    // Shake effect logic could go here
                     this.userAnswer = '';
                     alert("The Scholar shakes his head. Try again.");
                 }
@@ -223,6 +212,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // IMPORTANT: Every HTML page must have <div id="app">
     app.mount('#app');
 });
