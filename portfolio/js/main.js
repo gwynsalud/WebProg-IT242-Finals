@@ -12,19 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const app = createApp({
         data() {
             return {
-                // Game State
+                // --- Game & UI State ---
                 gameStarted: false,
                 isPaused: false,
 
-                // Guestbook Form Data
+                // --- Guestbook Form Data ---
                 newName: '',
                 newMessage: '',
                 submitted: false,
                 entries: [],
 
-                // RPG Class Selection Data
+                // --- RPG Class Selection Data ---
                 selectedClass: 'Scholar',
-                selectedAvatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=Scholar', // Placeholder pixel art
+                selectedAvatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=Scholar',
                 classes: [
                     { name: 'Warrior', icon: '⚔️', avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=Warrior' },
                     { name: 'Mage', icon: '🪄', avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=Mage' },
@@ -41,16 +41,24 @@ document.addEventListener('DOMContentLoaded', () => {
             // B. SUPABASE INITIAL FETCH
             await this.fetchEntries();
 
-            // C. REAL-TIME LISTENER (Replaces Firebase .on('value'))
-            // This makes the guestbook update instantly when someone else signs!
+            // C. REAL-TIME LISTENER (Quest Logic: Listen for new travelers)
             supabaseClient
-                .channel('schema-db-changes')
-                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'visitors' }, payload => {
-                    this.entries.unshift(payload.new);
-                })
+                .channel('public:visitors')
+                .on('postgres_changes', 
+                    { 
+                        event: 'INSERT', 
+                        schema: 'public', 
+                        table: 'visitors' 
+                    }, 
+                    (payload) => {
+                        console.log('New Traveler Joined:', payload.new);
+                        // Add to the top of the list instantly
+                        this.entries.unshift(payload.new);
+                    }
+                )
                 .subscribe();
 
-            // D. KEYBOARD SHORTCUTS
+            // D. KEYBOARD SHORTCUTS (Pause Menu)
             window.addEventListener('keydown', (e) => {
                 const isTyping = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
                 if (!isTyping && (e.key === 'Escape' || e.key.toLowerCase() === 'p')) {
@@ -58,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // E. UI HELPERS
+            // E. UI HELPERS (Skills & Scrolling)
             this.$nextTick(() => {
                 this.initSkillHoverEffects();
                 this.initScrollToTop();
@@ -66,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         methods: {
-            // --- DATA METHODS ---
+            // --- DATA METHODS (The Backend Layer) ---
 
             async fetchEntries() {
                 const { data, error } = await supabaseClient
@@ -77,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (error) {
                     console.error("Error fetching ledger:", error.message);
                 } else {
-                    this.entries = data;
+                    this.entries = data || [];
                 }
             },
 
@@ -86,27 +94,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 this.submitted = true;
 
-                const { data, error } = await supabaseClient
+                const { error } = await supabaseClient
                     .from('visitors')
                     .insert([{
                         name: this.newName,
                         message: this.newMessage,
                         desired_class: this.selectedClass,
                         avatar_url: this.selectedAvatar
-                    }])
-                    .select();
+                    }]);
 
                 if (error) {
                     console.error("Error signing ledger:", error.message);
                     this.submitted = false;
+                    alert("The ledger is sealed! (Check your RLS policies or connection)");
                 } else {
-                    // Note: Real-time listener handles the unshift, 
-                    // but we clear the form here
+                    // Reset Form
                     this.newName = '';
                     this.newMessage = '';
+                    // Keep 'submitted' true for a few seconds for the success animation
                     setTimeout(() => { this.submitted = false; }, 3000);
                 }
             },
+
+            // --- RPG UI LOGIC ---
 
             selectClass(job) {
                 this.selectedClass = job.name;
@@ -114,12 +124,16 @@ document.addEventListener('DOMContentLoaded', () => {
             },
 
             formatDate(timestamp) {
-                if (!timestamp) return "Unknown Date";
+                if (!timestamp) return "Unknown Era";
                 const date = new Date(timestamp);
-                return date.toLocaleDateString();
+                return date.toLocaleDateString(undefined, { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
             },
 
-            // --- GAME ENGINE METHODS ---
+            // --- ENGINE METHODS (The Gameplay Layer) ---
 
             checkInitialLock() {
                 const unlocked = localStorage.getItem('site_unlocked');
@@ -142,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
             togglePause() {
                 if (!this.gameStarted) return;
                 this.isPaused = !this.isPaused;
+                // Lock body scroll when paused
                 document.body.style.overflow = this.isPaused ? 'hidden' : '';
             },
 
