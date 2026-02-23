@@ -6,6 +6,7 @@
     <title>The Scholar's Trial</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="quiz-app">
@@ -15,41 +16,33 @@
         </nav>
 
         <main class="quest-container">
-            <div class="scholar-aura">
-                <div class="scholar-icon">🧙‍♂️</div>
-                <div class="magic-circle"></div>
+            <div class="sprite-wrapper">
+                <span class="animate-bounce">🧙‍♂️</span>
             </div>
 
-            <h1 class="ancient-title">{{ title }}</h1>
-
-            <div v-if="!completed" class="riddle-scroll">
-                <div class="scroll-top"></div>
+            <div v-if="!completed" class="pixel-box">
+                <div class="step-indicator">LVL {{ currentStep + 1 }}</div>
                 
-                <div class="scroll-content">
-                    <span class="step-counter">— Step {{ currentStep + 1 }} —</span>
-                    <p class="riddle-text">"{{ questions[currentStep].text }}"</p>
-                    
-                    <div class="input-wrapper">
-                        <input type="text" 
-                            v-model="userAnswer" 
-                            @keyup.enter="checkAnswer" 
-                            placeholder="Whisper the answer..."
-                            autofocus>
-                        <div class="input-glow"></div>
-                    </div>
-                    
-                    <button class="cast-btn" @click="checkAnswer">Cast Spell</button>
+                <p class="riddle-text">
+                    SCHOLAR: "{{ questions[currentStep].text }}"
+                </p>
+                
+                <input type="text" 
+                    v-model="userAnswer" 
+                    class="pixel-input"
+                    @keyup.enter="checkAnswer" 
+                    placeholder="INPUT ANSWER..."
+                    autofocus>
+                
+                <div style="text-align: right;">
+                    <button class="pixel-btn" @click="checkAnswer">CONFIRM ></button>
                 </div>
-
-                <div class="scroll-bottom"></div>
             </div>
 
-            <div v-else class="riddle-scroll success-scroll animate-glow">
-                <div class="scroll-content">
-                    <h2 class="success-title">Knowledge Unlocked</h2>
-                    <p>The Scholar fades into mist, leaving behind the key to his deck.</p>
-                    <a href="index.html" class="cast-btn">Enter the Secret Deck</a>
-                </div>
+            <div v-else class="pixel-box">
+                <h2 style="color: var(--pixel-accent); font-size: 14px;">QUEST COMPLETE!</h2>
+                <p class="riddle-text">YOU HAVE OBTAINED THE SCHOLAR'S KEY.</p>
+                <a href="index.html" class="pixel-btn" style="text-decoration: none; display: inline-block;">GO BACK</a>
             </div>
         </main>
     </div>

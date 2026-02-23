@@ -2032,3 +2032,54 @@ canvas {
     color: #2c1810;
     box-shadow: 0 0 20px #d4af37;
 }
+
+/* Question Text with "Typewriter" feel */
+.riddle-text {
+    color: var(--pixel-text);
+    font-size: 12px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+/* Pixel Input Field */
+.pixel-input {
+    background: #222;
+    border: 2px solid var(--pixel-border);
+    color: var(--pixel-accent);
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    margin-bottom: 20px;
+    outline: none;
+}
+
+/* 8-bit Button */
+.pixel-btn {
+    background: var(--pixel-border);
+    color: var(--pixel-bg);
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px 0px #888;
+    transition: transform 0.1s;
+}
+
+.pixel-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px #888;
+}
+
+/* Scholar Sprite Wrapper */
+.sprite-wrapper {
+    margin-bottom: 20px;
+}
+
+.sprite-wrapper img, .sprite-wrapper span {
+    font-size: 50px;
+    image-rendering: pixelated;
+}
