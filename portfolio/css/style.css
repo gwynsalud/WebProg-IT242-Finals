@@ -2058,7 +2058,7 @@ canvas {
 
 /* 8-bit Button */
 .pixel-btn {
-    background: var(--pixel-border);
+    background: var(--pixel-gold);
     color: var(--pixel-bg);
     border: none;
     padding: 10px 20px;
