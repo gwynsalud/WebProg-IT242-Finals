@@ -342,6 +342,145 @@
 
     </div>
   </section>
+
+  <!-- ================= GOALS SECTION ================= -->
+
+  <section id="goals" class="py-5 min-vh-100">
+    <div class="container">
+      <h2 class="rpg-title text-center mb-5">Main Goals and Objectives</h2>
+        
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-5">
+            <div class="goal-card decryption-active">
+                <div class="scanline"></div>
+                  <div class="goal-header d-flex justify-content-between">
+                    <span class="goal-status blink">[DECRYPTING...]</span>
+                    <span class="goal-rarity">EPIC</span>
+                  </div>
+                  <h3 class="goal-title">MASTER: FULL-STACK PROGRAMMING</h3>
+                  <p class="goal-description">"Continue leveling up technical skills while gaining real-world experience through projects, internships, and hands-on learning."</p>
+                  <div class="loading-container">
+                    <div class="loading-label">SYNCING DATA: 40%</div>
+                      <div class="loading-bar"><div class="loading-fill" style="width: 40%;"></div></div>
+                  </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+          <div class="goal-card legendary-glitch">
+            <div class="goal-header d-flex justify-content-between">
+              <span class="goal-status">[LOCKED]</span>
+              <span class="goal-rarity" style="color: #ff00ff;">LEGENDARY</span>
+            </div>
+            <h3 class="goal-title">BE A RICH SINGLE TITA</h3>
+            <p class="goal-description">"The ultimate endgame quest. Create meaningful impact for individuals and communities."</p>
+            <div class="loading-container">
+              <div class="loading-label">REQUIREMENT: LVL 99 EXPERTISE</div>
+                <div class="loading-bar locked-bar"><div class="loading-fill" style="width: 20%;"></div></div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col-12 text-center">
+          <div class="portal-rings mb-4"></div>
+            <a href="#gallery" class="rpg-btn-portal">
+              <span class="portal-text">ENTER THE ARCHIVE</span>
+              <span class="portal-sub">View Memory Shards & Photos</span>
+            </a>
+          </div>
+        </div>
+      </div>
+  </section>
+  
+  
+  <!-- ================= GALLERY ================= -->
+  
+  <section id="gallery" class="py-5 min-vh-100 bg-dark">
+    <div class="container">
+        <h2 class="rpg-title text-center mb-5">MEMORY ARCHIVE: My Pets</h2>
+        
+        <div class="gallery-grid">
+          <div class="memory-shard">
+            <div class="shard-frame">
+              <img src="assets/images/gizmo.png" alt="Memory 1: Gizmo">
+                <div class="shard-glitch"></div>
+            </div>
+            <div class="shard-caption">My Childhood Dog</div>
+          </div>
+
+          <div class="memory-shard">
+            <div class="shard-frame">
+              <img src="assets/images/yappie.png" alt="Memory 2: Yappie">
+            </div>
+            <div class="shard-caption">The One Who Likes Eating Hair</div>
+          </div>
+
+          <div class="memory-shard">
+            <div class="shard-frame">
+              <img src="assets/images/cypher.png" alt="Memory 3: Cypher">
+                <div class="shard-glitch"></div>
+            </div>
+            <div class="shard-caption">One of My Favorite Angels</div>
+          </div>
+
+          <div class="memory-shard">
+            <div class="shard-frame">
+              <img src="assets/images/tsuna.png" alt="Memory 4: Tsuna">
+            </div>
+            <div class="shard-caption">The One Who is a Snob</div>
+          </div>
+
+          <div class="memory-shard">
+            <div class="shard-frame">
+              <img src="assets/images/pochacco.png" alt="Memory 5: Pochacco">
+                <div class="shard-glitch"></div>
+            </div>
+            <div class="shard-caption">My Favorite Sanrio Character</div>
+          </div>
+
+          <div class="memory-shard">
+            <div class="shard-frame">
+              <img src="assets/images/jiji.png" alt="Memory 6: Jiji">
+                <div class="shard-glitch"></div>
+            </div>
+            <div class="shard-caption">My Favorite Ghibli Character</div>
+          </div>
+
+          <div class="memory-shard">
+            <div class="shard-frame">
+              <img src="assets/images/sylveon.png" alt="Memory 7">
+            </div>
+            <div class="shard-caption">My Favorite Pokemon</div>
+          </div>
+
+          <div class="memory-shard">
+            <div class="shard-frame">
+              <img src="assets/images/artemis.png" alt="Memory 8">
+                <div class="shard-glitch"></div>
+            </div>
+            <div class="shard-caption">My In-Game Name inspiration</div>
+          </div>
+
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-12 text-center">
+            <div class="loading-dots mb-3">
+              <span>.</span><span>.</span><span>.</span>
+            </div>
+            <section v-if="isScholar" id="scholars-deck">
+              </section>
+            <section v-else>
+              <p>The Scholar's Deck is locked. Take the <a href="quiz.html">Trial</a> to unlock it.</p>
+            </section>
+          </div>
+        </div>
+    
+    </div>
+  </section>
+
+
   </div>
 
 
