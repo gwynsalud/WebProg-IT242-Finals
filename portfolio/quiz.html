@@ -15,29 +15,41 @@
         </nav>
 
         <main class="quest-container">
-            <div class="scholar-avatar">🧙‍♂️</div>
-            <h1>{{ title }}</h1>
-
-            <div v-if="!completed" class="quiz-card animate-fade-in">
-                <span class="quiz-progress">Trial Step {{ currentStep + 1 }} of {{ questions.length }}</span>
-                
-                <p class="question-text">"{{ questions[currentStep].text }}"</p>
-                
-                <input type="text" 
-                    v-model="userAnswer" 
-                    @keyup.enter="checkAnswer" 
-                    placeholder="Answer in common tongue..."
-                    autofocus>
-                
-                <div class="quiz-actions">
-                    <button class="rpg-btn" @click="checkAnswer">Submit Answer</button>
-                </div>
+            <div class="scholar-aura">
+                <div class="scholar-icon">🧙‍♂️</div>
+                <div class="magic-circle"></div>
             </div>
 
-            <div v-else class="quiz-card success-card">
-                <h2>✨ Knowledge Attained ✨</h2>
-                <p>The Scholar bows respectfully. "You have proven your worth. The hidden records are now open to you, traveler."</p>
-                <a href="index.html" class="rpg-btn">Return to the Tavern</a>
+            <h1 class="ancient-title">{{ title }}</h1>
+
+            <div v-if="!completed" class="riddle-scroll">
+                <div class="scroll-top"></div>
+                
+                <div class="scroll-content">
+                    <span class="step-counter">— Step {{ currentStep + 1 }} —</span>
+                    <p class="riddle-text">"{{ questions[currentStep].text }}"</p>
+                    
+                    <div class="input-wrapper">
+                        <input type="text" 
+                            v-model="userAnswer" 
+                            @keyup.enter="checkAnswer" 
+                            placeholder="Whisper the answer..."
+                            autofocus>
+                        <div class="input-glow"></div>
+                    </div>
+                    
+                    <button class="cast-btn" @click="checkAnswer">Cast Spell</button>
+                </div>
+
+                <div class="scroll-bottom"></div>
+            </div>
+
+            <div v-else class="riddle-scroll success-scroll animate-glow">
+                <div class="scroll-content">
+                    <h2 class="success-title">Knowledge Unlocked</h2>
+                    <p>The Scholar fades into mist, leaving behind the key to his deck.</p>
+                    <a href="index.html" class="cast-btn">Enter the Secret Deck</a>
+                </div>
             </div>
         </main>
     </div>

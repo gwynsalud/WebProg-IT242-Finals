@@ -1929,3 +1929,106 @@ canvas {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* Ancient Title */
+.ancient-title {
+    font-family: 'Cinzel', serif;
+    color: #d4af37;
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+}
+
+/* The Magic Aura */
+.scholar-aura {
+    position: relative;
+    width: 100px;
+    margin: 0 auto;
+}
+
+.magic-circle {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px; height: 80px;
+    border: 2px dashed #d4af37;
+    border-radius: 50%;
+    animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* The Riddle Scroll */
+.riddle-scroll {
+    background: #e6d5b8;
+    background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    border-left: 2px solid #8b4513;
+    border-right: 2px solid #8b4513;
+    box-shadow: 0 0 30px rgba(0,0,0,0.7);
+    position: relative;
+}
+
+.riddle-text {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.5rem;
+    color: #2c1810;
+    line-height: 1.4;
+    margin: 20px 0;
+    font-style: italic;
+}
+
+/* Mystical Input */
+.input-wrapper {
+    position: relative;
+    margin: 30px 0;
+}
+
+.riddle-scroll input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #8b4513;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: #2c1810;
+    outline: none;
+}
+
+.input-glow {
+    position: absolute;
+    bottom: 0; left: 50%;
+    width: 0; height: 2px;
+    background: #d4af37;
+    transition: 0.5s ease;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px #d4af37;
+}
+
+.riddle-scroll input:focus + .input-glow {
+    width: 100%;
+}
+
+/* Cast Spell Button */
+.cast-btn {
+    background: #2c1810;
+    color: #d4af37;
+    border: 1px solid #d4af37;
+    padding: 12px 30px;
+    font-family: 'Cinzel', serif;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.cast-btn:hover {
+    background: #d4af37;
+    color: #2c1810;
+    box-shadow: 0 0 20px #d4af37;
+}
