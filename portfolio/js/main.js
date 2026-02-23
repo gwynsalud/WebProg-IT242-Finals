@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // --- Game & UI State ---
                 gameStarted: false,
                 isPaused: false,
+                isScholar: false,
 
                 // --- Guestbook Form Data ---
                 newName: '',

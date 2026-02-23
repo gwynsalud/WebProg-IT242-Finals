@@ -776,10 +776,11 @@
             <div class="loading-dots mb-3">
               <span>.</span><span>.</span><span>.</span>
             </div>
-            <a href="resources.html" class="rpg-btn-teleport">
-              <span class="teleport-text">ACCESS SCHOLAR'S DECK</span>
-              <span class="teleport-sub">Explore Resources</span>
-            </a>
+            <section v-if="isScholar" id="scholars-deck">
+              </section>
+            <section v-else>
+              <p>The Scholar's Deck is locked. Take the <a href="quiz.html">Trial</a> to unlock it.</p>
+            </section>
           </div>
         </div>
     

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Scholar's Trial</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="quiz-app">
+        <nav class="tavern-nav">
+            <a href="index.html">📜 Tavern Ledger</a>
+            <a href="bouncer.html">⚔️ Tavern Patrol</a>
+        </nav>
+
+        <main class="quest-container">
+            <h1>{{ title }}</h1>
+
+            <div v-if="!completed" class="card">
+                <h3>Question {{ currentStep + 1 }} of {{ questions.length }}</h3>
+                <p class="question-text">{{ questions[currentStep].text }}</p>
+                
+                <input type="text" 
+                       v-model="userAnswer" 
+                       @keyup.enter="checkAnswer" 
+                       placeholder="Type your answer...">
+                
+                <button @click="checkAnswer">Submit Answer</button>
+            </div>
+
+            <div v-else class="success-screen">
+                <h2>🎉 You passed the Trial!</h2>
+                <p>The Scholar hands you a secret key. You can now access the hidden deck.</p>
+                <a href="index.html" class="btn">Return to Tavern</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/quiz.js"></script>
+</body>
+</html>
