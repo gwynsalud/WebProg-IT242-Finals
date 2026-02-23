@@ -25,16 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 entries: [],
                 apiUrl: '/api/visitors',
 
-                // --- QUIZ DATA (Scholar's Trial) ---
-                isScholar: localStorage.getItem('scholar_trial_passed') === 'true',
-                currentStep: 0,
-                userAnswer: '',
-                questions: [
-                    { text: "I have no voice, but I tell the world how to look. I wear many sheets, but I never sleep. What am I?", answer: "CSS" },
-                    { text: "I am a view that sees all, reactive and swift. I bind the data to the soul of the page. What am I?", answer: "Vue" },
-                    { text: "I am the vault of ten thousand names, the memory of the tavern that never fades. What am I?", answer: "Supabase" }
-                ],
-
                 // --- CLASS SELECTION DATA ---
                 selectedClass: localStorage.getItem('hero_class') || 'Scholar',
                 selectedAvatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=Scholar',
@@ -109,24 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.selectedAvatar = job.avatar;
                 localStorage.setItem('hero_class', job.name);
                 this.userClass = job.name;
-            },
-
-            // --- QUIZ METHODS ---
-
-            checkAnswer() {
-                const correct = this.questions[this.currentStep].answer.toLowerCase();
-                if (this.userAnswer.toLowerCase().trim() === correct) {
-                    if (this.currentStep < this.questions.length - 1) {
-                        this.currentStep++;
-                        this.userAnswer = '';
-                    } else {
-                        this.isScholar = true;
-                        localStorage.setItem('scholar_trial_passed', 'true');
-                    }
-                } else {
-                    this.userAnswer = '';
-                    alert("The Scholar shakes his head. Try again.");
-                }
             },
 
             // --- DATA METHODS (REST API) ---
