@@ -15,24 +15,29 @@
         </nav>
 
         <main class="quest-container">
+            <div class="scholar-avatar">🧙‍♂️</div>
             <h1>{{ title }}</h1>
 
-            <div v-if="!completed" class="card">
-                <h3>Question {{ currentStep + 1 }} of {{ questions.length }}</h3>
-                <p class="question-text">{{ questions[currentStep].text }}</p>
+            <div v-if="!completed" class="quiz-card animate-fade-in">
+                <span class="quiz-progress">Trial Step {{ currentStep + 1 }} of {{ questions.length }}</span>
+                
+                <p class="question-text">"{{ questions[currentStep].text }}"</p>
                 
                 <input type="text" 
-                       v-model="userAnswer" 
-                       @keyup.enter="checkAnswer" 
-                       placeholder="Type your answer...">
+                    v-model="userAnswer" 
+                    @keyup.enter="checkAnswer" 
+                    placeholder="Answer in common tongue..."
+                    autofocus>
                 
-                <button @click="checkAnswer">Submit Answer</button>
+                <div class="quiz-actions">
+                    <button class="rpg-btn" @click="checkAnswer">Submit Answer</button>
+                </div>
             </div>
 
-            <div v-else class="success-screen">
-                <h2>🎉 You passed the Trial!</h2>
-                <p>The Scholar hands you a secret key. You can now access the hidden deck.</p>
-                <a href="index.html" class="btn">Return to Tavern</a>
+            <div v-else class="quiz-card success-card">
+                <h2>✨ Knowledge Attained ✨</h2>
+                <p>The Scholar bows respectfully. "You have proven your worth. The hidden records are now open to you, traveler."</p>
+                <a href="index.html" class="rpg-btn">Return to the Tavern</a>
             </div>
         </main>
     </div>

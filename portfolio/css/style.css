@@ -1823,3 +1823,109 @@ canvas {
   color: #fff;
   background: #222;
 }
+
+/* --- Scholar's Quiz Aesthetic --- */
+
+.quest-container {
+    max-width: 600px;
+    margin: 100px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* The "Scroll" Card */
+.quiz-card {
+    background: #f4e4bc; /* Parchment Color */
+    color: #2c1810;
+    padding: 40px;
+    border: 15px solid transparent;
+    border-image: url('https://www.transparenttextures.com/patterns/dark-leather.png') 30 round;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 50px rgba(0,0,0,0.1);
+    position: relative;
+    border-radius: 5px;
+}
+
+/* Ancient Text Style */
+.question-text {
+    font-size: 1.4rem;
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* RPG Style Input */
+.quiz-card input {
+    width: 80%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 2px solid #8b4513;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #2c1810;
+    margin-bottom: 20px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.quiz-card input:focus {
+    background: white;
+    box-shadow: 0 0 10px #d4af37;
+}
+
+/* The Navigation bar for games */
+.tavern-nav {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    z-index: 1000;
+}
+
+.tavern-nav a {
+    color: #d4af37;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tavern-nav a:hover {
+    color: white;
+    text-shadow: 0 0 5px #d4af37;
+}
+
+/* Progress Indicator */
+.quiz-progress {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #8b4513;
+    margin-bottom: 10px;
+    display: block;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.scholar-avatar {
+    font-size: 4rem;
+    animation: float 3s ease-in-out infinite;
+    margin-bottom: -10px;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
