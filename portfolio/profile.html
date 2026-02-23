@@ -19,6 +19,32 @@
 </head>
 
 <body>
+      <div id="guestbook-app" v-cloak>
+
+    <transition name="fade">
+        <div v-if="isPaused" class="pause-overlay" @click.self="togglePause">
+            <div class="pixel-box pause-menu-content text-center">
+            <h2 class="menu-title">- PAUSED -</h2>
+            
+            <div class="menu-stats">
+                <p>PLAYER: {{ userClass }}</p>
+                <p>LOCATION: {{ currentPageName }}</p>
+            </div>
+
+            <nav class="menu-links">
+                <a href="index.html" class="menu-item">🏠 MAIN LOBBY</a>
+                <a href="profile.html" class="menu-item">👤 CHARACTER SHEET</a>
+                <a href="quests.html" class="menu-item">⚔️ QUEST LOG</a>
+                <a href="guild.html" class="menu-item">📜 GUILD LEDGER</a>
+                <a href="library.html" class="menu-item">📖 THE LIBRARY</a>
+                <a href="bouncer.html" class="menu-item">🕹️ TAVERN PATROL</a>
+            </nav>
+
+            <button class="pixel-btn mt-4" @click="togglePause">RESUME</button>
+            </div>
+        </div>
+        </transition>
+
       <!-- ================= ABOUT SECTION ================= -->
   
   <section id="about" class="min-vh-100 d-flex flex-column align-items-center">
@@ -316,6 +342,7 @@
 
     </div>
   </section>
+  </div>
 
 
 
