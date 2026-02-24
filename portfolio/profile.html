@@ -479,10 +479,24 @@
             <div class="loading-dots mb-3">
               <span>.</span><span>.</span><span>.</span>
             </div>
-            <section v-if="isScholar" id="scholars-deck">
-              </section>
-            <section v-else>
-              <p>The Scholar's Deck is locked. Take the <a href="quiz.html">Trial</a> to unlock it.</p>
+
+            <section id="scholars-deck" class="mb-5">
+              <h3 class="pixel-text mb-4">📜 THE SCHOLAR'S DECK</h3>
+              <div class="deck-container">
+                <p>Consult the ancient scrolls of my most prized projects and knowledge.</p>
+                
+                <a href="scholar-deck.html" class="pixel-btn">OPEN THE ARCHIVES</a>
+              </div>
+            </section>
+
+            <hr class="pixel-hr my-5">
+
+            <section id="tavern-entry">
+              <p class="mb-3 text-muted">Finished studying? Head over to the tavern.</p>
+              <a href="bouncer.html" class="rpg-btn-portal">
+                <span class="portal-text">PLAY TAVERN PATROL</span>
+                <span class="portal-sub">Bouncer Mini-Game</span>
+              </a>
             </section>
           </div>
         </div>
