@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- SHARED APP CONFIGURATION ---
-    // We store this in a variable so bouncer.js can extend it if needed
     window.rootConfig = {
         data() {
             return {
@@ -22,7 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 newMessage: '',
                 submitted: false,
                 entries: [],
-                apiUrl: '/api/visitors',
+                // Requirement: Using the REST API endpoint for Supabase
+                // Note: Replace 'visitors' with your actual table name if different
+                apiUrl: `${supabaseUrl}/rest/v1/visitors`,
 
                 // --- CLASS SELECTION DATA ---
                 selectedClass: localStorage.getItem('hero_class') || 'Scholar',
@@ -52,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         async mounted() {
             this.checkInitialLock();
 
+            // Only run guestbook logic if on the guild page
             if (this.currentPage === 'guild.html') {
                 await this.fetchEntries();
                 this.initRealtimeListener();
@@ -99,21 +101,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.userClass = job.name;
             },
 
-            // --- GUESTBOOK METHODS ---
+            // --- GUESTBOOK METHODS (USING FETCH API) ---
             async fetchEntries() {
                 try {
-                    const response = await fetch(this.apiUrl);
+                    const response = await fetch(`${this.apiUrl}?select=*&order=created_at.desc`, {
+                        method: 'GET',
+                        headers: {
+                            'apikey': supabaseKey,
+                            'Authorization': `Bearer ${supabaseKey}`
+                        }
+                    });
+                    if (!response.ok) throw new Error('Network response was not ok');
                     this.entries = await response.json();
-                } catch (err) { console.error("Ledger fetch failed:", err); }
+                } catch (err) { 
+                    console.error("Ledger fetch failed:", err); 
+                }
             },
 
             async addEntry() {
                 if (this.submitted || !this.newName.trim() || !this.newMessage.trim()) return;
+                
                 this.submitted = true;
                 try {
                     const response = await fetch(this.apiUrl, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'apikey': supabaseKey,
+                            'Authorization': `Bearer ${supabaseKey}`,
+                            'Prefer': 'return=representation' 
+                        },
                         body: JSON.stringify({
                             name: this.newName,
                             message: this.newMessage,
@@ -121,11 +138,27 @@ document.addEventListener('DOMContentLoaded', () => {
                             avatar_url: this.selectedAvatar
                         })
                     });
+
                     if (response.ok) {
-                        this.newName = ''; this.newMessage = '';
+                        this.newName = ''; 
+                        this.newMessage = '';
+                        // Refresh the list after successful post
+                        await this.fetchEntries();
                         setTimeout(() => { this.submitted = false; }, 3000);
+                    } else {
+                        throw new Error('Post failed');
                     }
-                } catch (err) { this.submitted = false; alert("The ledger is sealed!"); }
+                } catch (err) { 
+                    this.submitted = false; 
+                    alert("The ledger is sealed!"); 
+                    console.error(err);
+                }
+            },
+
+            formatDate(dateString) {
+                if (!dateString) return "Ancient Time";
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString(undefined, options);
             },
 
             initRealtimeListener() {
@@ -164,8 +197,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- MOUNT LOGIC ---
-    // If we are on bouncer.html, we DON'T mount yet. bouncer.js will do it.
-    if (!window.location.pathname.includes('bouncer.html')) {
+    // Pages like bouncer.html extend rootConfig and mount themselves.
+    // For guild.html, since we put the fetch logic in main.js, we can mount it here 
+    // UNLESS you have a separate guild.js file. 
+    // Given the current setup, we will allow it to mount here if no specialized script is present.
+    
+    const specializedPages = ['bouncer.html']; 
+    const isSpecialized = specializedPages.some(page => window.location.pathname.includes(page));
+
+    if (!isSpecialized) {
         Vue.createApp(window.rootConfig).mount('#app');
     }
 });
