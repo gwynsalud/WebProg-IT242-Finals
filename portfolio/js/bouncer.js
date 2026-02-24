@@ -1,7 +1,7 @@
 /**
  * bouncer.js
  * Extends the global rootConfig with Tavern Patrol game logic.
- * Features: Aggressive score-based scaling (every 100pts) & Level Up alerts.
+ * Features: Dynamic boundary detection & Aggressive score-based scaling.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,11 +23,20 @@ document.addEventListener('DOMContentLoaded', () => {
         npcIdCounter: 0,
         gameLoopInterval: null,
         spawnRate: 0.03,
-        stageWidth: 1000 
+        // Internal tracking for boundaries
+        stageWidth: 1000,
+        stageHeight: 500
     };
 
     const gameMethods = {
         startBouncerGame() {
+            // Measure the stage immediately on start to ensure correct boundaries
+            const stage = document.getElementById('game-stage');
+            if (stage) {
+                this.stageWidth = stage.clientWidth;
+                this.stageHeight = stage.clientHeight;
+            }
+
             this.gameScore = 0;
             this.gameLives = 3;
             this.difficulty = 1.0;
@@ -52,18 +61,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.triggerLevelUp(newLevel);
             }
 
-            // Difficulty formula: Base + (Level-1) * 0.25 (e.g., Level 5 is 2x speed)
             this.difficulty = 1 + (this.currentLevel - 1) * 0.25;
 
-            // Spawn rate also increases with score
+            // Spawn rate scaling
             if (Math.random() < this.spawnRate * (1 + this.gameScore / 500)) {
                 this.spawnNPC();
             }
 
+            // Move NPCs
             for (let i = this.activeNPCs.length - 1; i >= 0; i--) {
                 const npc = this.activeNPCs[i];
                 npc.x += npc.speed * this.difficulty;
 
+                // Check if NPC has fully exited the stage width
                 if (npc.x > this.stageWidth) {
                     if (npc.type === 'baddie') this.loseLife();
                     this.activeNPCs.splice(i, 1);
@@ -79,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         spawnNPC() {
+            const npcSize = 60; // Matches CSS width/height
             const roll = Math.random();
             let selected;
             
@@ -90,10 +101,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 selected = { icon: '☕', color: '#4dff88', type: 'guest' };
             }
 
+            // Ensure Y coordinate keeps the NPC fully inside the top and bottom borders
+            // Range: 0 to (Stage Height - NPC Height)
+            const safeY = Math.random() * (this.stageHeight - npcSize);
+
             this.activeNPCs.push({
                 id: this.npcIdCounter++,
-                x: -60,
-                y: Math.random() * (550 - 50) + 50, 
+                x: -npcSize, // Start just off-screen to the left
+                y: safeY,
                 speed: Math.random() * 2 + 2,
                 ...selected
             });
@@ -107,13 +122,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.playEffect('hit');
             } else if (npc.type === 'powerup') {
                 this.gameScore += 50;
+                // Power-up clears all sleepers currently on screen
                 this.activeNPCs = this.activeNPCs.filter(n => n.type !== 'baddie');
                 this.playEffect('powerup');
             } else {
+                // Hitting coffee costs a life and points
                 this.gameScore = Math.max(0, this.gameScore - 20);
                 this.loseLife();
                 this.playEffect('error');
             }
+            // Remove the specific NPC that was clicked
             this.activeNPCs = this.activeNPCs.filter(n => n.id !== npc.id);
         },
 
@@ -126,12 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
             this.gameActive = false;
             clearInterval(this.gameLoopInterval);
             const best = localStorage.getItem('tavern_high_score') || 0;
+            
             if (this.gameScore > best) {
                 localStorage.setItem('tavern_high_score', this.gameScore);
-                alert(`🎉 NEW HIGH SCORE: ${this.gameScore}!`);
-            } else {
-                alert(`SHIFT OVER!\nScore: ${this.gameScore}\nBest: ${best}`);
             }
+            // The UI Overlay handles the "Shift Over" screen; we just stop the logic here.
         },
 
         playEffect(type) { console.log(`Tavern Sfx: ${type}`); }
@@ -139,9 +156,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const finalConfig = {
         ...window.rootConfig,
-        data() { return { ...window.rootConfig.data(), ...gameData }; },
-        methods: { ...window.rootConfig.methods, ...gameMethods },
-        mounted: window.rootConfig.mounted,
+        data() { 
+            return { 
+                ...window.rootConfig.data(), 
+                ...gameData 
+            }; 
+        },
+        methods: { 
+            ...window.rootConfig.methods, 
+            ...gameMethods 
+        },
+        mounted() {
+            if (window.rootConfig.mounted) window.rootConfig.mounted.call(this);
+            
+            // Initial boundary check
+            const stage = document.getElementById('game-stage');
+            if (stage) {
+                this.stageWidth = stage.clientWidth;
+                this.stageHeight = stage.clientHeight;
+            }
+            
+            // Re-check boundaries if window is resized
+            window.addEventListener('resize', () => {
+                if (stage) {
+                    this.stageWidth = stage.clientWidth;
+                    this.stageHeight = stage.clientHeight;
+                }
+            });
+        },
         computed: window.rootConfig.computed
     };
 
