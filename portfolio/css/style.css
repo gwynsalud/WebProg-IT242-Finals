@@ -238,11 +238,6 @@ canvas {
 
 /* =============== START MENU =============== */
 
-#about {
-    margin-top: 0;
-    padding-top: 20px; /* Extra breathing room below the HUD */
-}
-
 #start-menu {
   background: 
     linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
