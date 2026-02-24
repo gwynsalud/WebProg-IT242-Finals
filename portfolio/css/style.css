@@ -1640,6 +1640,7 @@ canvas {
     letter-spacing: 1px;
 
     width: 100%; 
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1657,6 +1658,28 @@ canvas {
     cursor: pointer;
 }
 
+#guestbook {
+    height: 100vh; 
+    max-height: 100vh;
+    overflow: hidden; /* Prevents the section itself from scrolling */
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#guestbook .container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Keeps children contained */
+}
+
+#guestbook .row {
+    flex: 1;
+    overflow: hidden; /* Prevents the row from expanding the page */
+}
+
 #guestbook .rpg-btn-gold:hover {
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0px #000;
@@ -1666,6 +1689,28 @@ canvas {
 #guestbook .rpg-btn-gold:active {
     transform: translate(4px, 4px);
     box-shadow: 0px 0px 0px #000;
+}
+
+.ledger-box {
+    display: flex;
+    flex-direction: column;
+    height: 80vh; /* Takes up most of the screen height */
+}
+
+.visitor-list {
+    flex: 1;
+    overflow-y: auto !important; /* Forces internal scroll */
+    padding-right: 10px;
+}
+
+/* Refined text sizes for the visitor cards */
+.visitor-msg {
+    font-size: 0.75rem !important;
+    line-height: 1.4;
+}
+
+.visitor-date {
+    font-size: 0.6rem !important;
 }
 
 .rpg-input {
