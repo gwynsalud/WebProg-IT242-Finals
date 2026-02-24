@@ -134,7 +134,7 @@ html, body {
     border: 2px solid;
     border-radius: 8px;
     z-index: 10;
-}}
+}
 
 .npc-character.baddie { 
     border-color: #ff4d4d; 
