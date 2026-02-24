@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tavern Patrol - Mini-Game</title>
-    
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bouncer.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="arcade-body">
 
 <div id="app" v-cloak>
     
@@ -18,15 +17,14 @@
         <span v-else>▶ RESUME</span>
     </button>
 
-    <div class="container-fluid py-5">
-        
-        <div class="text-center mb-4">
+    <div class="game-wrapper">
+        <header class="game-header">
             <h1 class="pixel-text glow-yellow">TAVERN PATROL</h1>
-            <p class="text-muted mt-2">Level {{ currentLevel }} • Speed x{{ difficulty.toFixed(1) }}</p>
-        </div>
+            <p class="status-text">Level {{ currentLevel }} • Speed x{{ difficulty.toFixed(1) }}</p>
+        </header>
 
-        <div class="game-hud d-flex justify-content-between mx-auto mb-2" style="max-width: 1000px;">
-            <div class="hud-box score-box">
+        <div class="game-hud mx-auto">
+            <div class="hud-box">
                 <div class="hud-label">SCORE</div>
                 <div class="hud-value">{{ gameScore }}</div>
                 <div class="progress-mini">
@@ -34,32 +32,30 @@
                 </div>
             </div>
             
-            <div class="hud-box lives-box">
+            <div class="hud-box">
                 <div class="hud-label">VITALITY</div>
                 <div class="d-flex gap-2 justify-content-center mt-1">
-                    <span v-for="n in 3" :key="n" class="heart-unit" :class="{ 'lost': n > gameLives }">
-                        ❤️
-                    </span>
+                    <span v-for="n in 3" :key="n" class="heart-unit" :class="{ 'lost': n > gameLives }">❤️</span>
                 </div>
             </div>
         </div>
 
-        <div id="game-stage" class="pixel-box-blue mx-auto">
+        <main id="game-stage">
             <div class="scanlines"></div>
             
             <transition name="fade">
                 <div v-if="!gameActive" class="game-overlay">
-                    <div class="overlay-content p-4">
-                        <h2 v-if="gameLives <= 0" class="mb-3 text-danger pulse">SHIFT FAILED</h2>
-                        <h2 v-else class="mb-3">COFFEE RUN</h2>
+                    <div class="overlay-card">
+                        <h2 v-if="gameLives <= 0" class="text-danger pulse">SHIFT FAILED</h2>
+                        <h2 v-else>COFFEE RUN</h2>
                         
-                        <div class="instruction-box mb-4">
-                            <p class="mb-2">BONK the Sleepers <span class="badge bg-danger">💤</span></p>
-                            <p class="mb-0">LEAVE the Coffee <span class="badge bg-success">☕</span></p>
-                            <p class="mt-2 small text-warning">🌟 Power-up clears the screen!</p>
+                        <div class="instruction-box my-4">
+                            <p>BONK Sleepers <span class="badge bg-danger">💤</span></p>
+                            <p>LEAVE Coffee <span class="badge bg-success">☕</span></p>
+                            <p class="small text-warning">🌟 Clears Screen!</p>
                         </div>
                         
-                        <button class="pixel-btn-yellow" @click="startBouncerGame">
+                        <button class="pixel-btn-yellow w-100" @click="startBouncerGame">
                             {{ gameLives <= 0 ? 'RETRY SHIFT' : 'START SHIFT' }}
                         </button>
                     </div>
@@ -70,24 +66,23 @@
                 v-for="npc in activeNPCs" 
                 :key="npc.id" 
                 class="npc-character"
-                :class="npc.type === 'baddie' ? 'baddie-glow' : (npc.type === 'powerup' ? 'power-glow' : 'guest-glow')"
-                :style="{ left: npc.x + 'px', top: npc.y + 'px', borderColor: npc.color }"
+                :class="npc.type"
+                :style="{ left: npc.x + 'px', top: npc.y + 'px' }"
                 @mousedown.prevent="bonk(npc)"
             >
-                <span class="npc-icon">{{ npc.icon }}</span>
+                {{ npc.icon }}
             </div>
 
             <transition name="pop">
-                <div v-if="showLevelUp" class="level-up-text">
-                    LEVEL {{ currentLevel }}<br>
-                    <small>SPEED INCREASED!</small>
+                <div v-if="showLevelUp" class="level-up-banner">
+                    LEVEL {{ currentLevel }}
                 </div>
             </transition>
-        </div>
+        </main>
 
-        <div class="text-center mt-4">
+        <footer class="game-footer">
             <a href="profile.html" class="pixel-link">← RETURN TO CHARACTER SHEET</a>
-        </div>
+        </footer>
     </div>
 
     <transition name="fade">
@@ -97,15 +92,14 @@
                 <nav class="menu-links">
                     <a href="index.html">MAIN LOBBY</a>
                     <a href="profile.html">CHARACTER SHEET</a>
-                    <a href="#" @click.prevent="togglePause" class="text-warning">RESUME GAME</a>
+                    <hr class="opacity-25 my-3">
+                    <a href="#" @click.prevent="togglePause" class="text-warning">RESUME</a>
                 </nav>
             </div>
         </div>
     </transition>
-
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="js/config.js"></script>
 <script src="js/main.js"></script>
