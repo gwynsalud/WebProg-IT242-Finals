@@ -31,7 +31,7 @@ html, body {
 /* ===== TYPOGRAPHY ===== */
 body {
   font-family: 'Press Start 2P', cursive;
-  padding-top: 20px;
+  padding-top: 110px;;
 }
 
 section {
@@ -204,6 +204,11 @@ canvas {
    ======================================== */
 
 /* =============== START MENU =============== */
+
+#about {
+    margin-top: 0;
+    padding-top: 20px; /* Extra breathing room below the HUD */
+}
 
 #start-menu {
   background: 
