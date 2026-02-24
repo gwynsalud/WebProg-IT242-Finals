@@ -37,10 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 selectedClass: localStorage.getItem('hero_class') || 'Scholar',
                 selectedAvatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=Scholar',
                 classes: [
-                    { name: 'Warrior', icon: '⚔️', avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=Warrior' },
-                    { name: 'Mage', icon: '🪄', avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=Mage' },
-                    { name: 'Rogue', icon: '🗡️', avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=Rogue' },
-                    { name: 'Scholar', icon: '📜', avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=Scholar' }
+                    { name: 'Warrior', icon: '⚔️', avatar: 'assets/images/warrior.png' },
+                    { name: 'Mage', icon: '🪄', avatar: 'assets/images/mage.png' },
+                    { name: 'Rogue', icon: '🗡️', avatar: 'assets/images/rogue.png' },
+                    { name: 'Scholar', icon: '📜', avatar: 'assets/images/scholar.png' }
                 ]
             }
         },
