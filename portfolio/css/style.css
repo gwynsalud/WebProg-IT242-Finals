@@ -1694,7 +1694,8 @@ canvas {
 .ledger-box {
     display: flex;
     flex-direction: column;
-    height: 80vh; /* Takes up most of the screen height */
+    height: 100%; /* Takes up most of the screen height */
+    max-height: 75vh;
 }
 
 .visitor-list {
