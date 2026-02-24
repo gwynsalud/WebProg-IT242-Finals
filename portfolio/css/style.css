@@ -18,6 +18,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 html, body {
@@ -30,6 +31,12 @@ html, body {
 /* ===== TYPOGRAPHY ===== */
 body {
   font-family: 'Press Start 2P', cursive;
+  padding-top: 20px;
+}
+
+section {
+  padding-top: 60px;
+  margin-top: -20px;
 }
 
 .rpg-title {
