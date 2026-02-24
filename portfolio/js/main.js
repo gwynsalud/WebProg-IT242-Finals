@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentPage: window.location.pathname.split("/").pop() || 'index.html',
 
                 // --- GUESTBOOK DATA ---
+                isLoading: false, // <-- Add this line
                 newName: '',
                 newMessage: '',
                 submitted: false,
@@ -104,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // --- API REQUIREMENT: FETCH METHODS (Corrected Headers) ---
             async fetchEntries() {
+                this.isLoading = true; // Start loading
                 try {
                     const response = await fetch(`${this.apiUrl}?select=*&order=created_at.desc`, {
                         method: 'GET',
@@ -116,6 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     this.entries = await response.json();
                 } catch (err) { 
                     console.error("Ledger fetch failed:", err); 
+                } finally {
+                    // We use finally to ensure loading stops even if it fails
+                    setTimeout(() => { this.isLoading = false; }, 500); // Small delay for "feel"
                 }
             },
 
