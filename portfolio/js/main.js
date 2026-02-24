@@ -1,8 +1,9 @@
 // js/main.js
 document.addEventListener('DOMContentLoaded', () => {
     
-    if (typeof supabaseClient === 'undefined') {
-        console.error("Supabase client not found. Ensure config.js is loaded correctly.");
+    // Safety check: ensure our config variables exist before proceeding
+    if (typeof supabaseUrl === 'undefined' || typeof supabaseKey === 'undefined') {
+        console.error("Configuration missing! Make sure config.js is loaded before main.js.");
         return;
     }
 
@@ -21,8 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 newMessage: '',
                 submitted: false,
                 entries: [],
-                // Requirement: Using the REST API endpoint for Supabase
-                // Note: Replace 'visitors' with your actual table name if different
+                // API REQUIREMENT: Constructing the REST URL for the 'visitors' table
                 apiUrl: `${supabaseUrl}/rest/v1/visitors`,
 
                 // --- CLASS SELECTION DATA ---
@@ -53,10 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
         async mounted() {
             this.checkInitialLock();
 
-            // Only run guestbook logic if on the guild page
+            // Run Guestbook logic only on Guild Hall page
             if (this.currentPage === 'guild.html') {
                 await this.fetchEntries();
-                this.initRealtimeListener();
+                if (typeof supabaseClient !== 'undefined') {
+                    this.initRealtimeListener();
+                }
             }
 
             this.$nextTick(() => {
@@ -68,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         methods: {
-            // --- GLOBAL NAVIGATION & ENGINE ---
+            // --- GLOBAL UI METHODS ---
             togglePause() {
                 this.isPaused = !this.isPaused;
                 document.body.style.overflow = this.isPaused ? 'hidden' : '';
@@ -101,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.userClass = job.name;
             },
 
-            // --- GUESTBOOK METHODS (USING FETCH API) ---
+            // --- API REQUIREMENT: FETCH METHODS ---
             async fetchEntries() {
                 try {
                     const response = await fetch(`${this.apiUrl}?select=*&order=created_at.desc`, {
@@ -111,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             'Authorization': `Bearer ${supabaseKey}`
                         }
                     });
-                    if (!response.ok) throw new Error('Network response was not ok');
+                    if (!response.ok) throw new Error('API fetch failed');
                     this.entries = await response.json();
                 } catch (err) { 
                     console.error("Ledger fetch failed:", err); 
@@ -142,8 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (response.ok) {
                         this.newName = ''; 
                         this.newMessage = '';
-                        // Refresh the list after successful post
-                        await this.fetchEntries();
+                        await this.fetchEntries(); // Refresh list via API
                         setTimeout(() => { this.submitted = false; }, 3000);
                     } else {
                         throw new Error('Post failed');
@@ -157,8 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             formatDate(dateString) {
                 if (!dateString) return "Ancient Time";
-                const options = { year: 'numeric', month: 'short', day: 'numeric' };
-                return new Date(dateString).toLocaleDateString(undefined, options);
+                return new Date(dateString).toLocaleDateString(undefined, {
+                    month: 'short', day: 'numeric', year: 'numeric'
+                });
             },
 
             initRealtimeListener() {
@@ -171,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }).subscribe();
             },
 
-            // --- UI HELPERS ---
+            // --- MISC UI ---
             initSkillHoverEffects() {
                 const skillItems = document.querySelectorAll('.skill-item');
                 const descBox = document.getElementById('skill-desc');
@@ -197,15 +199,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- MOUNT LOGIC ---
-    // Pages like bouncer.html extend rootConfig and mount themselves.
-    // For guild.html, since we put the fetch logic in main.js, we can mount it here 
-    // UNLESS you have a separate guild.js file. 
-    // Given the current setup, we will allow it to mount here if no specialized script is present.
-    
-    const specializedPages = ['bouncer.html']; 
-    const isSpecialized = specializedPages.some(page => window.location.pathname.includes(page));
-
-    if (!isSpecialized) {
+    // Only mount if we aren't on a page that handles its own mounting (like bouncer.js)
+    const isBouncerPage = window.location.pathname.includes('bouncer.html');
+    if (!isBouncerPage) {
         Vue.createApp(window.rootConfig).mount('#app');
     }
 });
