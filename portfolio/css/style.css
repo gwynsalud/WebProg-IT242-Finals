@@ -1635,9 +1635,9 @@ canvas {
 
 /* GUEST BOOK SECTION */
 /* --- GUESTBOOK SECTION LAYOUT --- */
+/* Section Lock */
 #guestbook {
     height: 100vh;
-    max-height: 100vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -1654,37 +1654,20 @@ canvas {
 #guestbook .row {
     flex: 1;
     overflow: hidden;
-    align-items: stretch; /* Stretch columns to match height */
 }
 
-#guestbook .col-md-6, 
-#guestbook .col-md-5 {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-/* --- FORM & TERMINAL --- */
+/* Form Container & Content */
 .terminal-window {
-    flex: 1;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    padding: 1.5rem !important;
 }
 
 .terminal-window form {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; 
-}
-
-/* Allow the message box to take up available space */
-.terminal-window textarea.rpg-input {
-    flex: 1; 
-    min-height: 80px;
-    margin-bottom: 15px;
+    justify-content: flex-start; /* Keeps items tight */
 }
 
 /* --- THE GOLD BUTTON (Fixed Sizing) --- */
