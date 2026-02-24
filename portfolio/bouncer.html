@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tavern Patrol - Mini-Game</title>
+    <title>Tavern Patrol - Arcade</title>
+    
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bouncer.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
-<body class="arcade-body">
+<body class="arcade-mode">
 
 <div id="app" v-cloak>
     
@@ -17,13 +18,14 @@
         <span v-else>▶ RESUME</span>
     </button>
 
-    <div class="game-wrapper">
+    <div class="game-container">
+        
         <header class="game-header">
             <h1 class="pixel-text glow-yellow">TAVERN PATROL</h1>
             <p class="status-text">Level {{ currentLevel }} • Speed x{{ difficulty.toFixed(1) }}</p>
         </header>
 
-        <div class="game-hud mx-auto">
+        <div class="game-hud">
             <div class="hud-box">
                 <div class="hud-label">SCORE</div>
                 <div class="hud-value">{{ gameScore }}</div>
@@ -43,25 +45,6 @@
         <main id="game-stage">
             <div class="scanlines"></div>
             
-            <transition name="fade">
-                <div v-if="!gameActive" class="game-overlay">
-                    <div class="overlay-card">
-                        <h2 v-if="gameLives <= 0" class="text-danger pulse">SHIFT FAILED</h2>
-                        <h2 v-else>COFFEE RUN</h2>
-                        
-                        <div class="instruction-box my-4">
-                            <p>BONK Sleepers <span class="badge bg-danger">💤</span></p>
-                            <p>LEAVE Coffee <span class="badge bg-success">☕</span></p>
-                            <p class="small text-warning">🌟 Clears Screen!</p>
-                        </div>
-                        
-                        <button class="pixel-btn-yellow w-100" @click="startBouncerGame">
-                            {{ gameLives <= 0 ? 'RETRY SHIFT' : 'START SHIFT' }}
-                        </button>
-                    </div>
-                </div>
-            </transition>
-
             <div 
                 v-for="npc in activeNPCs" 
                 :key="npc.id" 
@@ -73,6 +56,24 @@
                 {{ npc.icon }}
             </div>
 
+            <transition name="fade">
+                <div v-if="!gameActive" class="game-overlay">
+                    <div class="overlay-card">
+                        <h2 v-if="gameLives <= 0" class="text-danger pulse">SHIFT FAILED</h2>
+                        <h2 v-else>READY?</h2>
+                        
+                        <div class="instruction-box my-4">
+                            <p>BONK Sleepers <span class="badge bg-danger">💤</span></p>
+                            <p>LEAVE Coffee <span class="badge bg-success">☕</span></p>
+                        </div>
+                        
+                        <button class="pixel-btn-yellow" @click="startBouncerGame">
+                            {{ gameLives <= 0 ? 'RETRY' : 'START' }}
+                        </button>
+                    </div>
+                </div>
+            </transition>
+
             <transition name="pop">
                 <div v-if="showLevelUp" class="level-up-banner">
                     LEVEL {{ currentLevel }}
@@ -81,7 +82,7 @@
         </main>
 
         <footer class="game-footer">
-            <a href="profile.html" class="pixel-link">← RETURN TO CHARACTER SHEET</a>
+            <a href="profile.html" class="pixel-link">← EXIT TO CHARACTER SHEET</a>
         </footer>
     </div>
 

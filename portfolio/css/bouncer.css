@@ -1,76 +1,75 @@
-/* --- Centering & Layout --- */
-.arcade-body {
+/* --- Global Fixes --- */
+html, body {
     margin: 0;
     padding: 0;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden; /* Prevents scrolling */
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Fixes scrolling */
     background-color: #0a0a12;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-.game-wrapper {
+#app {
+    height: 100%;
+    width: 100%;
+}
+
+.game-container {
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    max-width: 1100px;
-    height: 100vh;
-    padding: 20px;
+    padding: 10px;
     box-sizing: border-box;
 }
 
-/* --- Header & Typography --- */
-.game-header { text-align: center; margin-bottom: 15px; }
-.pixel-text { font-family: 'Press Start 2P', cursive; font-size: 2rem; color: #fff; }
+/* --- HUD & Header --- */
+.game-header { text-align: center; margin-bottom: 10px; }
+.pixel-text { font-family: 'Press Start 2P', cursive; font-size: 1.8rem; color: #fff; margin: 0; }
 .glow-yellow { text-shadow: 0 0 10px #ffd700; }
-.status-text { font-family: 'Press Start 2P', cursive; font-size: 10px; color: #666; margin-top: 10px; }
+.status-text { font-family: 'Press Start 2P', cursive; font-size: 10px; color: #666; margin-top: 5px; }
 
-/* --- HUD Aesthetic --- */
 .game-hud {
     display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
+    gap: 15px;
+    margin-bottom: 15px;
     font-family: 'Press Start 2P', cursive;
 }
 
 .hud-box {
     background: #111;
-    border: 3px solid #222;
-    padding: 15px;
-    min-width: 220px;
+    border: 2px solid #333;
+    padding: 10px 20px;
+    min-width: 180px;
     text-align: center;
-    box-shadow: 0 4px 0 #000;
 }
 
-.hud-label { font-size: 8px; color: #888; margin-bottom: 8px; }
-.hud-value { font-size: 20px; color: #fff; }
+.hud-label { font-size: 8px; color: #777; margin-bottom: 5px; }
+.hud-value { font-size: 18px; color: #fff; }
 
-.progress-mini { width: 100%; height: 6px; background: #000; margin-top: 10px; border: 1px solid #333; }
+.progress-mini { width: 100%; height: 4px; background: #000; margin-top: 8px; border: 1px solid #222; }
 .progress-fill { height: 100%; background: #ffd700; transition: width 0.3s; }
 
-/* --- Stage (Centerpiece) --- */
+/* --- Game Stage --- */
 #game-stage {
     position: relative;
-    width: 1000px;
-    height: 550px; /* Reduced slightly to ensure it fits on laptops */
+    width: 90vw;
+    max-width: 1000px;
+    height: 60vh; /* Scaled to screen height */
+    max-height: 500px;
     background: #0d0d1a;
-    border: 6px solid #1a1a2e;
-    border-radius: 4px;
-    box-shadow: inset 0 0 100px #000, 0 0 30px rgba(0,0,0,0.5);
+    border: 4px solid #1a1a2e;
+    box-shadow: inset 0 0 50px #000, 0 0 20px rgba(0,0,0,0.5);
     overflow: hidden;
 }
 
 .scanlines {
     position: absolute;
     inset: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 50%);
     background-size: 100% 4px;
-    z-index: 5;
     pointer-events: none;
+    z-index: 5;
 }
 
 /* --- NPCs --- */
@@ -81,53 +80,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 35px;
+    font-size: 30px;
     cursor: pointer;
     user-select: none;
     z-index: 10;
-    transition: transform 0.1s;
 }
 
-.npc-character:active { transform: scale(0.8); }
-.baddie { filter: drop-shadow(0 0 10px #ff4d4d); }
-.guest { filter: drop-shadow(0 0 10px #00ff88); }
-
-/* --- Overlays --- */
-.game-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    font-family: 'Press Start 2P', cursive;
-}
-
-.overlay-card {
-    background: #111;
-    border: 3px solid #333;
-    padding: 40px;
-    max-width: 450px;
-    text-align: center;
-}
-
+/* --- UI Buttons & Links --- */
 .pixel-btn-yellow {
     background: #ffd700;
     border: none;
-    padding: 20px;
+    padding: 15px 30px;
     font-family: 'Press Start 2P', cursive;
-    box-shadow: 0 6px 0 #b8860b;
+    box-shadow: 0 5px 0 #b8860b;
     cursor: pointer;
 }
 
-.pixel-btn-yellow:active { transform: translateY(4px); box-shadow: 0 2px 0 #b8860b; }
+.pixel-btn-yellow:active { transform: translateY(3px); box-shadow: 0 2px 0 #b8860b; }
 
-.game-footer { margin-top: 20px; }
+.game-footer { margin-top: 15px; }
+.pixel-link { font-family: 'Press Start 2P', cursive; font-size: 10px; color: #444; text-decoration: none; }
+.pixel-link:hover { color: #888; }
 
-/* Animations */
 .heart-unit { transition: 0.3s; display: inline-block; }
-.heart-unit.lost { opacity: 0.2; filter: grayscale(1); transform: scale(0.8); }
-
-@keyframes pulse-red { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-.pulse { animation: pulse-red 1s infinite; }
+.heart-unit.lost { opacity: 0.1; filter: grayscale(1); }
