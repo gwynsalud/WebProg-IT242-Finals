@@ -1,6 +1,7 @@
 /**
  * bouncer.js
  * Extends the global rootConfig with Tavern Patrol game logic.
+ * Updated for Coffee/Sleep theme and Full-Screen layout.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         npcIdCounter: 0,
         gameLoopInterval: null,
         spawnRate: 0.03,
-        stageWidth: 600
+        stageWidth: 1000 // Updated to match wider CSS
     };
 
     // 3. Define the Game-Specific Methods
@@ -45,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         updateGame() {
+            // Difficulty ramps slightly over time
             this.difficulty += 0.0005;
 
             if (Math.random() < this.spawnRate * this.difficulty) {
@@ -55,7 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const npc = this.activeNPCs[i];
                 npc.x += npc.speed * this.difficulty;
 
+                // Check if NPC left the stage bounds
                 if (npc.x > this.stageWidth) {
+                    // Penalty if a Sleeper (baddie) reaches the other side!
                     if (npc.type === 'baddie') {
                         this.loseLife();
                     }
@@ -76,8 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             this.activeNPCs.push({
                 id: this.npcIdCounter++,
-                x: -40,
-                y: Math.random() * (350 - 50) + 50,
+                x: -60, // Start slightly further back
+                // Y-axis randomized for the new 600px height
+                y: Math.random() * (550 - 50) + 50, 
                 speed: Math.random() * 2 + 2,
                 ...selected
             });
@@ -87,13 +92,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!this.gameActive || this.isPaused) return;
 
             if (npc.type === 'baddie') {
+                // Good job! You woke them up.
                 this.gameScore += 10;
                 this.playEffect('hit');
             } else {
+                // Oh no! You spilled the coffee.
                 this.gameScore = Math.max(0, this.gameScore - 20);
                 this.loseLife();
                 this.playEffect('error');
             }
+            // Remove character immediately on click
             this.activeNPCs = this.activeNPCs.filter(n => n.id !== npc.id);
         },
 
@@ -118,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         playEffect(type) {
-            console.log(`Game Sfx: ${type}`);
+            console.log(`Tavern Sfx: ${type}`);
         }
     };
 
@@ -126,18 +134,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalConfig = {
         ...window.rootConfig,
         data() {
-            // Combine data from main.js and this file
             return {
                 ...window.rootConfig.data(),
                 ...gameData
             };
         },
         methods: {
-            // Combine methods from main.js and this file
             ...window.rootConfig.methods,
             ...gameMethods
         },
-        // Also inherit mounted/computed from main.js
         mounted: window.rootConfig.mounted,
         computed: window.rootConfig.computed
     };
