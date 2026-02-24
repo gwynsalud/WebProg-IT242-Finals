@@ -162,9 +162,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             formatDate(dateString) {
                 if (!dateString) return "Ancient Time";
-                return new Date(dateString).toLocaleDateString(undefined, {
-                    month: 'short', day: 'numeric', year: 'numeric'
+                const date = new Date(dateString);
+                
+                // Formatting for: Feb 23, 2026 @ 14:30
+                const options = { month: 'short', day: 'numeric', year: 'numeric' };
+                const datePart = date.toLocaleDateString(undefined, options);
+                const timePart = date.toLocaleTimeString(undefined, { 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    hour12: false 
                 });
+
+                return `${datePart} @ ${timePart}`;
             },
 
             initRealtimeListener() {
