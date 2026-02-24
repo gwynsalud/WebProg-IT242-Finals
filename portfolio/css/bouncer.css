@@ -1,15 +1,18 @@
 /* Game Area Container */
 #game-stage {
-    width: 100%;
-    max-width: 600px;
-    height: 400px;
+    width: 95%; /* Use more horizontal space */
+    max-width: 1000px; /* Increased from 600px */
+    height: 600px;    /* Increased from 400px */
     margin: 0 auto;
-    background: #1a1a2e; /* Deep tavern blue/black */
+    background-color: #1a1a2e;
+    /* Added a subtle pixel grid/floor look */
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 50px 50px; 
     position: relative;
     overflow: hidden;
     border: 6px solid #4e4e4e;
-    image-rendering: pixelated;
-    cursor: url('https://api.iconify.design/mdi:hammer.svg?color=white'), crosshair;
 }
 
 /* NPC Characters */

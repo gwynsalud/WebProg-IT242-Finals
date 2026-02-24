@@ -67,8 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
         spawnNPC() {
             const isBaddie = Math.random() > 0.5;
             const types = {
-                baddie: { icon: '😈', color: '#ff4d4d', type: 'baddie' },
-                guest: { icon: '🍺', color: '#4dff88', type: 'guest' }
+                // The "Troublemaker" is now someone falling asleep!
+                baddie: { icon: '💤', color: '#ff4d4d', type: 'baddie' }, 
+                // The "Guest" is a fresh coffee
+                guest: { icon: '☕', color: '#4dff88', type: 'guest' }
             };
             const selected = isBaddie ? types.baddie : types.guest;
 

@@ -4,83 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tavern Patrol - Mini-Game</title>
-    <link rel="stylesheet" href="css/style.css"> <link rel="stylesheet" href="css/bouncer.css"> <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bouncer.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div id="app" v-cloak>
-  <button class="pause-btn" @click="togglePause">
-    <span v-if="!isPaused">〓 MENU</span>
-    <span v-else>▶ RESUME</span>
-  </button>
+    
+    <button class="pause-btn" @click="togglePause">
+        <span v-if="!isPaused">〓 MENU</span>
+        <span v-else>▶ RESUME</span>
+    </button>
 
-  <div class="container py-5">
-    <div class="text-center mb-4">
-      <h1 class="pixel-text">TAVERN PATROL</h1>
-      <p class="text-muted">Keep the troublemakers out of the Guild Hall!</p>
-    </div>
-
-    <div class="game-hud d-flex justify-content-between mx-auto mb-2" style="max-width: 600px;">
-      <div class="hud-box">SCORE: {{ gameScore }}</div>
-      <div class="hud-box">LIVES: 
-        <span v-for="n in 3" :key="n" :style="{ opacity: n <= gameLives ? 1 : 0.2 }">❤️</span>
-      </div>
-    </div>
-
-    <div id="game-stage" class="pixel-box-blue">
-      <div v-if="!gameActive" class="game-overlay">
-        <div class="overlay-content">
-          <h2 v-if="gameLives <= 0" class="mb-3 text-danger">GAME OVER</h2>
-          <h2 v-else class="mb-3">READY FOR YOUR SHIFT?</h2>
-          
-          <p class="mb-4 small">BONK the RED intruders (😈)<br>LEAVE the GREEN guests (🍺)</p>
-          
-          <button class="pixel-btn-yellow" @click="startBouncerGame">
-            {{ gameLives <= 0 ? 'TRY AGAIN' : 'START GAME' }}
-          </button>
+    <div class="container-fluid py-5">
+        
+        <div class="text-center mb-4">
+            <h1 class="pixel-text">TAVERN PATROL</h1>
+            <p class="text-muted">Stop the sleepers! Keep the energy high with fresh brews.</p>
         </div>
-      </div>
 
-      <div 
-        v-for="npc in activeNPCs" 
-        :key="npc.id" 
-        class="npc-character"
-        :class="npc.type === 'baddie' ? 'baddie-glow' : 'guest-glow'"
-        :style="{ left: npc.x + 'px', top: npc.y + 'px', borderColor: npc.color }"
-        @mousedown.prevent="bonk(npc)"
-      >
-        <span class="npc-icon">{{ npc.icon }}</span>
-      </div>
+        <div class="game-hud d-flex justify-content-between mx-auto mb-2" style="max-width: 1000px;">
+            <div class="hud-box">
+                SCORE: {{ gameScore }}
+            </div>
+            <div class="hud-box">
+                LIVES: 
+                <span v-for="n in 3" :key="n" :style="{ opacity: n <= gameLives ? 1 : 0.2 }">
+                    ❤️
+                </span>
+            </div>
+        </div>
+
+        <div id="game-stage" class="pixel-box-blue mx-auto">
+            
+            <transition name="fade">
+                <div v-if="!gameActive" class="game-overlay">
+                    <div class="overlay-content p-4">
+                        <h2 v-if="gameLives <= 0" class="mb-3 text-danger">SHIFT OVER</h2>
+                        <h2 v-else class="mb-3">COFFEE RUN</h2>
+                        
+                        <div class="instruction-box mb-4">
+                            <p class="mb-2">BONK the Sleepers <span class="badge bg-danger">💤</span></p>
+                            <p class="mb-0">LEAVE the Coffee <span class="badge bg-success">☕</span></p>
+                        </div>
+                        
+                        <button class="pixel-btn-yellow" @click="startBouncerGame">
+                            {{ gameLives <= 0 ? 'RESTART SHIFT' : 'START SHIFT' }}
+                        </button>
+                    </div>
+                </div>
+            </transition>
+
+            <div 
+                v-for="npc in activeNPCs" 
+                :key="npc.id" 
+                class="npc-character"
+                :class="npc.type === 'baddie' ? 'baddie-glow' : 'guest-glow'"
+                :style="{ left: npc.x + 'px', top: npc.y + 'px', borderColor: npc.color }"
+                @mousedown.prevent="bonk(npc)"
+            >
+                <span class="npc-icon">{{ npc.icon }}</span>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="profile.html" class="pixel-link">← RETURN TO CHARACTER SHEET</a>
+        </div>
     </div>
 
-    <div class="text-center mt-4">
-      <a href="profile.html" class="pixel-link">← RETURN TO CHARACTER SHEET</a>
-    </div>
-  </div>
+    <transition name="fade">
+        <div v-if="isPaused" class="pause-overlay" @click.self="togglePause">
+            <div class="menu-content text-center">
+                <h2 class="menu-title">- PAUSED -</h2>
+                <nav class="menu-links">
+                    <a href="index.html">MAIN LOBBY</a>
+                    <a href="profile.html">CHARACTER SHEET</a>
+                    <a href="quests.html">QUEST LOG</a>
+                    <a href="guild.html">GUILD SIGN-IN</a>
+                    <hr class="border-secondary my-3">
+                    <a href="#" @click.prevent="togglePause" class="text-warning">RESUME GAME</a>
+                </nav>
+            </div>
+        </div>
+    </transition>
 
-  <transition name="fade">
-    <div v-if="isPaused" class="pause-overlay" @click.self="togglePause">
-      <div class="menu-content text-center">
-        <h2 class="menu-title">- PAUSED -</h2>
-        <nav class="menu-links">
-          <a href="index.html">MAIN LOBBY</a>
-          <a href="profile.html">CHARACTER SHEET</a>
-          <a href="quests.html">QUEST LOG</a>
-          <a href="guild.html">GUILD SIGN-IN</a>
-          <a href="#" @click.prevent="togglePause">RESUME GAME</a>
-        </nav>
-      </div>
-    </div>
-  </transition>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 <script src="js/config.js"></script>
 
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
 <script src="js/main.js"></script>
 <script src="js/bouncer.js"></script>
+
 </body>
 </html>
