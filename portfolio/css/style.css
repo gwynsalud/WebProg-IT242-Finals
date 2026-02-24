@@ -2255,3 +2255,53 @@ canvas {
       padding: 0;
       line-height: 2;
     }
+
+/* Story Mode HUD Styling */
+.story-hud {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #000;
+}
+
+.story-nav-scroll {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 5px;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.story-nav-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+.story-nav-item {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 12px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.story-nav-item:hover, .story-nav-item.active {
+  color: #ffc107;
+  border-color: #ffc107;
+  background: #111;
+}
+
+.pause-btn-static {
+  background: #ffc107;
+  border: 4px solid #8b4513;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+  padding: 5px 15px;
+  color: #000;
+  cursor: pointer;
+}
+
+.border-pixel-bottom {
+  border-bottom: 4px solid #333;
+}
