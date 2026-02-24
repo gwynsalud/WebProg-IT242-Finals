@@ -2312,3 +2312,27 @@ canvas {
 .border-pixel-bottom {
   border-bottom: 4px solid #333;
 }
+
+.border-pixel-sm {
+  border: 2px solid #444;
+  position: relative;
+}
+
+.xp-bar-fill {
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+/* Optional: Add a flickering glow to the XP bar */
+.xp-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: bar-glow 2s infinite;
+}
+
+@keyframes bar-glow {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}

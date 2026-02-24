@@ -26,19 +26,24 @@
     <div class="d-flex align-items-center justify-content-between py-2">
       <div class="story-nav-scroll d-flex gap-2">
         <a href="profile.html" class="story-nav-item">PROFILE</a>
-        <a href="training.html" class="story-nav-item">TRAINING GROUNDS</a>
-        <a href="skills.html" class="story-nav-item">SKILL TREE</a>
+        <a href="training.html" class="story-nav-item">TRAINING</a>
+        <a href="skills.html" class="story-nav-item">SKILLS</a>
         <a href="objectives.html" class="story-nav-item">OBJECTIVES</a>
-        <a href="archive.html" class="story-nav-item">MEMORY ARCHIVE</a>
+        <a href="archive.html" class="story-nav-item">ARCHIVE</a>
         <a href="quests.html" class="story-nav-item">QUESTS</a>
         <a href="side-quests.html" class="story-nav-item">SIDE QUESTS</a>
-        <a href="resources.html" class="story-nav-item text-nowrap">SCHOLAR'S DECK</a>
+        <a href="resources.html" class="story-nav-item">RESOURCES</a>
         <a href="guild.html" class="story-nav-item">GUILD</a>
       </div>
+      <button class="pause-btn-static ms-3" @click="togglePause">〓 MENU</button>
+    </div>
 
-      <button class="pause-btn-static ms-3" @click="togglePause">
-        〓 MENU
-      </button>
+    <div class="xp-container pb-2 d-flex align-items-center gap-3">
+      <span class="quest-label" style="font-size: 0.5rem; color: #ffc107;">XP</span>
+      <div class="xp-bar-bg border-pixel-sm w-100" style="height: 10px; background: #222;">
+        <div class="xp-bar-fill" style="width: 45%; height: 100%; background: #ffc107; box-shadow: inset -4px 0 0 #b8860b;"></div>
+      </div>
+      <span class="quest-label" style="font-size: 0.5rem; white-space: nowrap;">LVL 01</span>
     </div>
   </div>
 </nav>
