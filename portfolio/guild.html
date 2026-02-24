@@ -32,42 +32,6 @@
     .dot:nth-child(2) { animation-delay: 0.2s; }
     .dot:nth-child(3) { animation-delay: 0.4s; }
     @keyframes jump { from { transform: translateY(0); } to { transform: translateY(-20px); } }
-
-    /* Vertical Height Fixes */
-    #guestbook {
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      padding: 2vh 0;
-    }
-
-    .terminal-window, .ledger-box {
-      height: 80vh; /* Sets a consistent height for both containers */
-      display: flex;
-      flex-direction: column;
-    }
-
-    .visitor-list {
-      flex: 1;
-      overflow-y: auto !important;
-    }
-
-    .avatar-preview-box {
-      width: 64px;
-      height: 64px;
-      flex-shrink: 0;
-      background: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .pixel-avatar-md {
-      width: 48px;
-      height: 48px;
-      image-rendering: pixelated;
-    }
   </style>
 </head>
 
@@ -96,16 +60,16 @@
 
     <section id="guestbook" class="bg-black text-white">
       <div class="container">
-        <h2 class="rpg-title text-center mb-4">GUILD SIGN-IN SHEET</h2>
+        <h2 class="rpg-title text-center mb-5">GUILD SIGN-IN SHEET</h2>
 
-        <div class="row justify-content-center g-4">
+        <div class="row justify-content-center g-5">
           <div class="col-md-6">
             <div class="terminal-window border-pixel">
-              <div class="window-top p-2">NEW ENTRY: SIGN THE LEDGER</div>
-              <form @submit.prevent="addEntry" class="p-3 d-flex flex-column h-100">
+              <div class="window-top p-2 mb-3">NEW ENTRY: SIGN THE LEDGER</div>
+              <form @submit.prevent="addEntry" class="p-1 p-md-2">
 
-                <div class="d-flex align-items-center mb-3 gap-3 p-2 bg-dark border-pixel">
-                  <div class="avatar-preview-box border-pixel">
+                <div class="d-flex align-items-center mb-3 gap-3 p-3 bg-dark border-pixel">
+                  <div class="avatar-preview-box">
                     <img :src="selectedAvatar" alt="Preview" class="pixel-avatar-md">
                   </div>
                   <div>
@@ -121,20 +85,20 @@
 
                 <div class="mb-3">
                   <label class="form-label quest-label">SELECT YOUR CLASS</label>
-                  <div class="d-flex flex-wrap gap-2 mt-1">
+                  <div class="d-flex flex-wrap gap-2 mt-2">
                     <button v-for="job in classes" :key="job.name" type="button" class="pixel-tab-sm"
                       :class="{ 'active-tab': selectedClass === job.name }" @click="selectClass(job)">
-                      {{ job.icon }}
+                      {{ job.icon }} {{ job.name }}
                     </button>
                   </div>
                 </div>
 
-                <div class="mb-3 flex-grow-1">
+                <div class="mb-3">
                   <label class="form-label quest-label">MESSAGE</label>
-                  <textarea v-model="newMessage" class="rpg-input w-100 h-100" placeholder="Leave a word for the dev..." required></textarea>
+                  <textarea v-model="newMessage" class="rpg-input w-100" rows="2" placeholder="Leave a word for the dev..." required></textarea>
                 </div>
 
-                <button type="submit" class="rpg-btn-gold w-100" :disabled="submitted">
+                <button type="submit" class="rpg-btn-gold" :class="{ 'success-state': submitted }" :disabled="submitted">
                   <span v-if="!submitted">SIGN LEDGER</span>
                   <span v-else>✔ QUEST COMPLETE!</span>
                 </button>
@@ -143,10 +107,10 @@
           </div>
 
           <div class="col-md-5">
-            <div class="ledger-box border-pixel">
-              <h3 class="stat-header p-3 mb-0 text-center">RECENT VISITORS</h3>
+            <div class="ledger-box p-4 border-pixel">
+              <h3 class="stat-header mb-4 text-center">RECENT VISITORS</h3>
               
-              <div class="visitor-list custom-scrollbar p-3">
+              <div class="visitor-list custom-scrollbar">
                 <div v-if="isLoading" class="ledger-loader">
                   <div class="pixel-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
                   <p>CONSULTING THE ANCIENT SCROLLS...</p>
@@ -156,11 +120,11 @@
                   <div v-for="(entry, index) in entries" :key="index" class="visitor-card mb-3 p-3"
                     :class="'border-class-' + (entry.desired_class || 'novice').toLowerCase()">
                     <div class="d-flex gap-3">
-                      <img :src="entry.avatar_url" class="pixel-avatar-sm" alt="Class" style="width:32px; height:32px; image-rendering:pixelated;">
+                      <img :src="entry.avatar_url" class="pixel-avatar-sm" alt="Class Icon">
                       <div class="w-100">
                         <div class="d-flex justify-content-between align-items-center">
                           <span class="visitor-name text-warning">> {{ entry.name }}</span>
-                          <span class="visitor-class-tag" style="font-size: 0.5rem;">{{ entry.desired_class }}</span>
+                          <span class="visitor-class-tag">{{ entry.desired_class }}</span>
                         </div>
                         <p class="visitor-msg mt-2 mb-1">"{{ entry.message }}"</p>
                         <div class="text-end">
