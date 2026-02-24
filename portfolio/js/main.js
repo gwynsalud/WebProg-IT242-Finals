@@ -17,13 +17,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 userClass: localStorage.getItem('hero_class') || 'Scholar',
                 currentPage: window.location.pathname.split("/").pop() || 'index.html',
 
+                // --- EXPLORATION / XP SYSTEM ---
+                // List of all story mode sections to track
+                allSections: [
+                    'profile.html', 'training.html', 'skills.html', 'objectives.html', 
+                    'archive.html', 'quests.html', 'side-quests.html', 'resources.html', 'guild.html'
+                ],
+                visitedSections: JSON.parse(localStorage.getItem('visited_sections')) || [],
+
                 // --- GUESTBOOK DATA ---
-                isLoading: false, // <-- Add this line
+                isLoading: false,
                 newName: '',
                 newMessage: '',
                 submitted: false,
                 entries: [],
-                // API REQUIREMENT: Using the fetch URL with the correct config variable
                 apiUrl: `${SUPABASE_URL}/rest/v1/visitors`,
 
                 // --- CLASS SELECTION DATA ---
@@ -45,14 +52,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     'profile.html': 'HERO STATS',
                     'quests.html': 'ADVENTURE LOG',
                     'guild.html': 'GUILD HALL',
-                    'bouncer.html': 'TAVERN PATROL'
+                    'bouncer.html': 'TAVERN PATROL',
+                    'modes.html': 'PATH SELECTION'
                 };
                 return map[this.currentPage] || 'UNKNOWN REALM';
+            },
+
+            // Calculates the width of the gold XP bar
+            explorationProgress() {
+                if (this.allSections.length === 0) return 0;
+                const progress = (this.visitedSections.length / this.allSections.length) * 100;
+                return Math.min(progress, 100);
+            },
+
+            // Dynamic Level calculation based on exploration
+            currentLevel() {
+                // Level up for every 2 unique sections visited
+                const lvl = Math.floor(this.visitedSections.length / 2) + 1;
+                return lvl.toString().padStart(2, '0');
             }
         },
 
         async mounted() {
             this.checkInitialLock();
+            this.trackExploration(); // Record current page visit
 
             // Run Guestbook logic only on Guild Hall page
             if (this.currentPage === 'guild.html') {
@@ -71,6 +94,20 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         methods: {
+            // --- XP TRACKING LOGIC ---
+            trackExploration() {
+                // Check if the current page is one of our tracked story sections
+                if (this.allSections.includes(this.currentPage)) {
+                    if (!this.visitedSections.includes(this.currentPage)) {
+                        this.visitedSections.push(this.currentPage);
+                        localStorage.setItem('visited_sections', JSON.stringify(this.visitedSections));
+                        
+                        // Optional: Console log to verify progress
+                        console.log(`Quest Updated: ${this.currentPage} recorded. XP: ${this.explorationProgress}%`);
+                    }
+                }
+            },
+
             togglePause() {
                 this.isPaused = !this.isPaused;
                 document.body.style.overflow = this.isPaused ? 'hidden' : '';
@@ -103,9 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.userClass = job.name;
             },
 
-            // --- API REQUIREMENT: FETCH METHODS (Corrected Headers) ---
             async fetchEntries() {
-                this.isLoading = true; // Start loading
+                this.isLoading = true;
                 try {
                     const response = await fetch(`${this.apiUrl}?select=*&order=created_at.desc`, {
                         method: 'GET',
@@ -119,8 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } catch (err) { 
                     console.error("Ledger fetch failed:", err); 
                 } finally {
-                    // We use finally to ensure loading stops even if it fails
-                    setTimeout(() => { this.isLoading = false; }, 500); // Small delay for "feel"
+                    setTimeout(() => { this.isLoading = false; }, 500);
                 }
             },
 
@@ -163,8 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
             formatDate(dateString) {
                 if (!dateString) return "Ancient Time";
                 const date = new Date(dateString);
-                
-                // Formatting for: Feb 23, 2026 @ 14:30
                 const options = { month: 'short', day: 'numeric', year: 'numeric' };
                 const datePart = date.toLocaleDateString(undefined, options);
                 const timePart = date.toLocaleTimeString(undefined, { 
@@ -172,12 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     minute: '2-digit', 
                     hour12: false 
                 });
-
                 return `${datePart} @ ${timePart}`;
             },
 
             initRealtimeListener() {
-                // Using supabaseClient as defined in your config.js
                 supabaseClient
                     .channel('public:visitors')
                     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'visitors' }, 
