@@ -1,200 +1,122 @@
-/* --- Root Theme & Typography --- */
-:root {
-    --tavern-dark: #0f0f1b;
-    --gold: #ffd700;
-    --baddie-red: #ff4d4d;
-    --guest-green: #00ff88;
-    --ui-border: #33334d;
-    --crt-opacity: 0.15;
-}
-
-/* --- Aesthetic HUD Container --- */
-.game-hud-container {
-    max-width: 1000px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-family: 'Press Start 2P', cursive;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 15px 25px;
-    border: 3px solid var(--ui-border);
-    border-radius: 4px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    margin-bottom: 20px;
-}
-
-.hud-item label {
-    display: block;
-    font-size: 8px;
-    color: #888;
-    margin-bottom: 8px;
-    letter-spacing: 1px;
-}
-
-.hud-value {
-    font-size: 18px;
-    color: #fff;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
-}
-
-/* --- Level Progress Bar --- */
-.level-progress-bar {
-    width: 200px;
-    height: 10px;
-    background: #111;
-    border: 2px solid var(--ui-border);
-    position: relative;
-    border-radius: 2px;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #00d4ff, var(--guest-green));
-    transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-}
-
-/* --- The Game Stage --- */
+/* --- Game Stage Styling --- */
 #game-stage {
     width: 95%;
     max-width: 1000px;
     height: 600px;
     margin: 0 auto;
-    background-color: var(--tavern-dark);
+    background-color: #0d0d1a;
     background-image: 
         linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: 50px 50px; 
     position: relative;
     overflow: hidden;
-    border: 8px solid #222;
-    border-radius: 8px;
-    box-shadow: inset 0 0 60px #000, 0 10px 30px rgba(0,0,0,0.7);
+    border: 6px solid #222;
+    box-shadow: inset 0 0 50px #000, 0 10px 20px rgba(0,0,0,0.5);
 }
 
-/* CRT Scanline Effect */
-.stage-fx {
+/* CRT Scanline effect for atmosphere */
+.scanlines {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        rgba(18, 16, 16, 0) 50%, 
-        rgba(0, 0, 0, var(--crt-opacity)) 50%
-    ), 
-    linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-    background-size: 100% 4px, 3px 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 4px;
     pointer-events: none;
     z-index: 5;
 }
 
-/* --- NPC Characters --- */
+/* --- HUD Aesthetic --- */
+.game-hud {
+    font-family: 'Press Start 2P', cursive;
+}
+
+.hud-box {
+    background: #111;
+    padding: 12px 20px;
+    border: 3px solid #333;
+    min-width: 180px;
+    text-align: center;
+}
+
+.hud-label {
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.hud-value {
+    font-size: 20px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+.progress-mini {
+    width: 100%;
+    height: 6px;
+    background: #222;
+    margin-top: 8px;
+    border: 1px solid #444;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #ffd700;
+    transition: width 0.3s ease;
+}
+
+/* --- Characters --- */
 .npc-character {
     position: absolute;
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.05);
+    width: 65px;
+    height: 65px;
+    background: rgba(0, 0, 0, 0.4);
     border: 3px solid;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 28px;
-    user-select: none;
+    font-size: 32px;
     cursor: pointer;
-    border-radius: 8px;
-    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 2;
-}
-
-.npc-character:hover {
-    transform: scale(1.1);
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.npc-character:active {
-    transform: scale(0.9);
-}
-
-/* Glow Variants */
-.baddie { border-color: var(--baddie-red); filter: drop-shadow(0 0 8px var(--baddie-red)); }
-.guest { border-color: var(--guest-green); filter: drop-shadow(0 0 8px var(--guest-green)); }
-.powerup { 
-    border-color: var(--gold); 
-    animation: glow-gold 1s infinite alternate, float 2s infinite ease-in-out; 
+    border-radius: 12px;
+    transition: transform 0.1s ease;
     z-index: 10;
 }
 
-/* --- Overlays & Cards --- */
+.npc-character:active { transform: scale(0.85); }
+
+.baddie-glow { box-shadow: 0 0 15px rgba(255, 77, 77, 0.4); border-color: #ff4d4d !important; }
+.guest-glow { box-shadow: 0 0 15px rgba(77, 255, 136, 0.2); border-color: #4dff88 !important; }
+.power-glow { 
+    border-color: #ffd700 !important;
+    animation: pulse-gold 1s infinite alternate; 
+}
+
+/* --- Overlays & UI --- */
 .game-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(10, 10, 20, 0.9);
-    z-index: 20;
-    font-family: 'Press Start 2P', cursive;
-}
-
-.overlay-card {
-    background: #1a1a2e;
-    border: 4px solid var(--ui-border);
-    padding: 40px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
-    max-width: 500px;
-}
-
-.instruction-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    background: #000;
-    padding: 20px;
-    border: 2px solid #333;
-}
-
-.ins-item { font-size: 10px; text-align: left; }
-.icon-box {
-    display: inline-block;
-    padding: 5px;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-.icon-box.red { background: rgba(255, 77, 77, 0.2); border: 1px solid var(--baddie-red); }
-.icon-box.green { background: rgba(0, 255, 136, 0.2); border: 1px solid var(--guest-green); }
-.icon-box.gold { background: rgba(255, 215, 0, 0.2); border: 1px solid var(--gold); }
-
-/* --- Level Up Banner --- */
-.level-up-banner {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    transform: translateY(-50%);
-    background: rgba(255, 215, 0, 0.15);
-    border-top: 3px solid var(--gold);
-    border-bottom: 3px solid var(--gold);
-    color: var(--gold);
-    font-family: 'Press Start 2P', cursive;
-    text-align: center;
-    padding: 30px 0;
+    background: rgba(0, 0, 0, 0.85);
     z-index: 100;
-    text-shadow: 0 0 15px var(--gold);
-    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
-/* --- Buttons --- */
+.instruction-box {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid #333;
+    padding: 15px;
+    font-size: 12px;
+}
+
 .pixel-btn-yellow {
-    background: var(--gold);
+    background: #ffd700;
     color: #000;
     border: none;
-    padding: 15px;
+    padding: 18px 30px;
     font-family: 'Press Start 2P', cursive;
-    font-size: 14px;
     cursor: pointer;
     box-shadow: 0 6px 0 #b8860b;
-    transition: all 0.1s;
-}
-
-.pixel-btn-yellow:hover {
-    background: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 0 #b8860b;
 }
 
 .pixel-btn-yellow:active {
@@ -202,29 +124,31 @@
     box-shadow: 0 2px 0 #b8860b;
 }
 
-/* --- Hearts --- */
-.heart-icon { transition: all 0.4s ease; display: inline-block; }
-.heart-icon.depleted {
-    filter: grayscale(1) brightness(0.4);
-    transform: scale(0.8);
-    opacity: 0.3;
+/* --- Level Up Message --- */
+.level-up-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Press Start 2P', cursive;
+    color: #ffd700;
+    text-align: center;
+    font-size: 2.2rem;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 4px 4px 0 #000;
+    z-index: 200;
+    pointer-events: none;
 }
 
-/* --- Animations --- */
-@keyframes glow-gold {
-    from { box-shadow: 0 0 5px var(--gold); filter: drop-shadow(0 0 2px #fff); }
-    to { box-shadow: 0 0 20px #fff; filter: drop-shadow(0 0 10px var(--gold)); }
+.heart-unit { font-size: 18px; transition: 0.3s; }
+.heart-unit.lost { opacity: 0.2; filter: grayscale(1); transform: scale(0.8); }
+
+@keyframes pulse-gold {
+    from { box-shadow: 0 0 10px #ffd700; transform: scale(1); }
+    to { box-shadow: 0 0 25px #fff; transform: scale(1.05); }
 }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+.pulse { animation: pulse-red 1.5s infinite; }
+@keyframes pulse-red {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
 }
-
-@keyframes level-pop {
-    0% { transform: translateY(-50%) scaleX(0); opacity: 0; }
-    20% { transform: translateY(-50%) scaleX(1); opacity: 1; }
-    80% { transform: translateY(-50%) scaleX(1); opacity: 1; }
-    100% { transform: translateY(-150%) scaleX(1); opacity: 0; }
-}
-.pop-enter-active { animation: level-pop 1.5s forwards; }
