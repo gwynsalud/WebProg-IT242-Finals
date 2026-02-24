@@ -1,15 +1,14 @@
 // js/main.js
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Check if Supabase client is loaded (needed for Real-time Guestbook updates)
     if (typeof supabaseClient === 'undefined') {
         console.error("Supabase client not found. Ensure config.js is loaded correctly.");
         return;
     }
 
-    const { createApp } = Vue;
-
-    const app = createApp({
+    // --- SHARED APP CONFIGURATION ---
+    // We store this in a variable so bouncer.js can extend it if needed
+    window.rootConfig = {
         data() {
             return {
                 // --- GLOBAL STATE ---
@@ -18,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 userClass: localStorage.getItem('hero_class') || 'Scholar',
                 currentPage: window.location.pathname.split("/").pop() || 'index.html',
 
-                // --- GUESTBOOK DATA (Guild Ledger) ---
+                // --- GUESTBOOK DATA ---
                 newName: '',
                 newMessage: '',
                 submitted: false,
@@ -37,17 +36,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
 
+        computed: {
+            currentPageName() {
+                const map = {
+                    'index.html': 'MAIN TAVERN',
+                    'profile.html': 'HERO STATS',
+                    'quests.html': 'ADVENTURE LOG',
+                    'guild.html': 'GUILD HALL',
+                    'bouncer.html': 'TAVERN PATROL'
+                };
+                return map[this.currentPage] || 'UNKNOWN REALM';
+            }
+        },
+
         async mounted() {
-            // A. INITIALIZATION
             this.checkInitialLock();
 
-            // B. PAGE-SPECIFIC LOGIC
             if (this.currentPage === 'guild.html') {
                 await this.fetchEntries();
                 this.initRealtimeListener();
             }
 
-            // C. UI HELPERS
             this.$nextTick(() => {
                 if (this.currentPage === 'profile.html') {
                     this.initSkillHoverEffects();
@@ -58,20 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         methods: {
             // --- GLOBAL NAVIGATION & ENGINE ---
-
             togglePause() {
-                // Toggle the state
                 this.isPaused = !this.isPaused;
-                
-                // Control background scrolling
-                if (this.isPaused) {
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    document.body.style.overflow = '';
-                }
+                document.body.style.overflow = this.isPaused ? 'hidden' : '';
             },
 
-            // New navigation logic for multi-page use
             navigateTo(url) {
                 this.isPaused = false;
                 document.body.style.overflow = '';
@@ -90,8 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.gameStarted = true;
                 localStorage.setItem('site_unlocked', 'true');
                 document.body.classList.remove('scroll-locked');
-                // Auto-pause or jump to character selection if desired:
-                // window.location.href = "#characters";
             },
 
             selectClass(job) {
@@ -101,21 +99,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.userClass = job.name;
             },
 
-            // --- DATA METHODS (REST API) ---
-
+            // --- GUESTBOOK METHODS ---
             async fetchEntries() {
                 try {
                     const response = await fetch(this.apiUrl);
                     this.entries = await response.json();
-                } catch (err) {
-                    console.error("Ledger fetch failed:", err);
-                }
+                } catch (err) { console.error("Ledger fetch failed:", err); }
             },
 
             async addEntry() {
                 if (this.submitted || !this.newName.trim() || !this.newMessage.trim()) return;
                 this.submitted = true;
-
                 try {
                     const response = await fetch(this.apiUrl, {
                         method: 'POST',
@@ -127,16 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             avatar_url: this.selectedAvatar
                         })
                     });
-
                     if (response.ok) {
-                        this.newName = '';
-                        this.newMessage = '';
+                        this.newName = ''; this.newMessage = '';
                         setTimeout(() => { this.submitted = false; }, 3000);
                     }
-                } catch (err) {
-                    this.submitted = false;
-                    alert("The ledger is sealed!");
-                }
+                } catch (err) { this.submitted = false; alert("The ledger is sealed!"); }
             },
 
             initRealtimeListener() {
@@ -146,24 +135,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     (payload) => {
                         const exists = this.entries.some(e => e.id === payload.new.id);
                         if (!exists) this.entries.unshift(payload.new);
-                    })
-                    .subscribe();
+                    }).subscribe();
             },
 
             // --- UI HELPERS ---
-
-            formatDate(ts) {
-                if (!ts) return "Unknown Era";
-                return new Date(ts).toLocaleDateString(undefined, { 
-                    year: 'numeric', month: 'short', day: 'numeric' 
-                });
-            },
-
             initSkillHoverEffects() {
                 const skillItems = document.querySelectorAll('.skill-item');
                 const descBox = document.getElementById('skill-desc');
                 if (!descBox) return;
-
                 skillItems.forEach(item => {
                     item.addEventListener('mouseenter', () => {
                         descBox.innerText = `SKILL: ${item.dataset.skill} | MASTERY: ${item.dataset.mastery}`;
@@ -182,7 +161,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         }
-    });
+    };
 
-    app.mount('#app');
+    // --- MOUNT LOGIC ---
+    // If we are on bouncer.html, we DON'T mount yet. bouncer.js will do it.
+    if (!window.location.pathname.includes('bouncer.html')) {
+        Vue.createApp(window.rootConfig).mount('#app');
+    }
 });
