@@ -1639,10 +1639,10 @@ canvas {
 #guestbook {
     height: 100vh;
     max-height: 100vh;
-    overflow: hidden; /* Restricts scrolling to the visitor list only */
+    /* overflow: hidden; Restricts scrolling to the visitor list only */
     display: flex;
     flex-direction: column;
-    padding: 3vh 0;
+    padding: 1vh 0;
     background-color: #000;
 }
 
@@ -1651,12 +1651,14 @@ canvas {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    height: 100%;
 }
 
 #guestbook .row {
     flex: 1;
     overflow: hidden;
     align-items: stretch; /* Ensures both columns are the same height */
+    padding-bottom: 20px;
 }
 
 /* --- FORM COLUMN (LEFT) --- */
@@ -1673,6 +1675,7 @@ canvas {
     overflow: hidden;
     padding: 1.5rem !important;
     background: #000;
+    min-height: 0;
 }
 
 .terminal-window form {
@@ -1680,6 +1683,29 @@ canvas {
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Pushes the button to the bottom */
+}
+
+.terminal-window textarea.rpg-input {
+    flex-grow: 1; /* Takes up available space */
+    min-height: 60px; /* Prevents disappearing */
+    max-height: 100px;
+}
+
+.avatar-preview-box {
+    width: 64px;
+    height: 64px;
+    border: 2px dashed #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #111;
+}
+
+.pixel-avatar-md {
+    width: 48px;
+    height: 48px;
+    image-rendering: pixelated;
 }
 
 /* --- INPUTS & LABELS --- */
@@ -1755,6 +1781,7 @@ canvas {
     flex: 1;
     overflow-y: auto !important;
     padding-right: 15px;
+    overflow-y: auto !important;
 }
 
 /* Scrollbar Styling */
