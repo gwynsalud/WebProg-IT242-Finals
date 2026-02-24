@@ -4,55 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tavern Patrol - Mini-Game</title>
-    
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bouncer.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div id="app" v-cloak>
-    
     <button class="pause-btn" @click="togglePause">
         <span v-if="!isPaused">〓 MENU</span>
         <span v-else>▶ RESUME</span>
     </button>
 
-    <div class="container-fluid py-5">
-        
-        <div class="text-center mb-4">
-            <h1 class="pixel-text">TAVERN PATROL</h1>
-            <p class="text-muted">Stop the sleepers! Keep the energy high with fresh brews.</p>
+    <div class="container-fluid py-4">
+        <div class="text-center mb-3">
+            <h1 class="pixel-text glow-text">TAVERN PATROL</h1>
+            <div class="d-flex justify-content-center align-items-center gap-3">
+                <span class="badge bg-dark border border-secondary text-muted">LEVEL {{ currentLevel }}</span>
+                <p class="text-muted m-0 small">Keep the energy high!</p>
+            </div>
         </div>
 
-        <div class="game-hud d-flex justify-content-between mx-auto mb-2" style="max-width: 1000px;">
-            <div class="hud-box">
-                SCORE: {{ gameScore }}
+        <div class="game-hud-container mx-auto mb-3">
+            <div class="hud-item left">
+                <label>SCORE</label>
+                <div class="hud-value">{{ gameScore }}</div>
             </div>
-            <div class="hud-box">
-                LIVES: 
-                <span v-for="n in 3" :key="n" :style="{ opacity: n <= gameLives ? 1 : 0.2 }">
-                    ❤️
-                </span>
+            
+            <div class="level-progress-bar">
+                <div class="progress-fill" :style="{ width: (gameScore % 100) + '%' }"></div>
+            </div>
+
+            <div class="hud-item right">
+                <label>VITALITY</label>
+                <div class="hud-value d-flex gap-1">
+                    <span v-for="n in 3" :key="n" class="heart-icon" :class="{ 'depleted': n > gameLives }">
+                        ❤️
+                    </span>
+                </div>
             </div>
         </div>
 
         <div id="game-stage" class="pixel-box-blue mx-auto">
+            <div class="stage-fx"></div>
             
             <transition name="fade">
-                <div v-if="!gameActive" class="game-overlay">
-                    <div class="overlay-content p-4">
-                        <h2 v-if="gameLives <= 0" class="mb-3 text-danger">SHIFT OVER</h2>
-                        <h2 v-else class="mb-3">COFFEE RUN</h2>
+                <div v-if="!gameActive" class="game-overlay d-flex flex-column justify-content-center align-items-center">
+                    <div class="overlay-card p-5 text-center">
+                        <template v-if="gameLives <= 0">
+                            <h2 class="text-danger mb-2">SHIFT FAILED</h2>
+                            <p class="mb-4 text-muted">The tavern fell asleep...</p>
+                        </template>
+                        <template v-else>
+                            <h2 class="mb-2">READY SHIFT?</h2>
+                            <p class="mb-4 text-muted">Level up every 100 points!</p>
+                        </template>
                         
-                        <div class="instruction-box mb-4">
-                            <p class="mb-2">BONK the Sleepers <span class="badge bg-danger">💤</span></p>
-                            <p class="mb-0">LEAVE the Coffee <span class="badge bg-success">☕</span></p>
+                        <div class="instruction-grid mb-4">
+                            <div class="ins-item"><span class="icon-box red">💤</span> BONK</div>
+                            <div class="ins-item"><span class="icon-box green">☕</span> IGNORE</div>
+                            <div class="ins-item"><span class="icon-box gold">🌟</span> POWER</div>
                         </div>
                         
-                        <button class="pixel-btn-yellow" @click="startBouncerGame">
-                            {{ gameLives <= 0 ? 'RESTART SHIFT' : 'START SHIFT' }}
+                        <button class="pixel-btn-yellow w-100" @click="startBouncerGame">
+                            {{ gameLives <= 0 ? 'RETRY' : 'START' }}
                         </button>
                     </div>
                 </div>
@@ -62,23 +77,25 @@
                 v-for="npc in activeNPCs" 
                 :key="npc.id" 
                 class="npc-character"
-                :class="npc.type === 'baddie' ? 'baddie-glow' : 'guest-glow'"
+                :class="npc.type"
                 :style="{ left: npc.x + 'px', top: npc.y + 'px', borderColor: npc.color }"
                 @mousedown.prevent="bonk(npc)"
             >
                 <span class="npc-icon">{{ npc.icon }}</span>
+                <div class="npc-shadow"></div>
             </div>
 
             <transition name="pop">
-                <div v-if="showLevelUp" class="level-up-text">
-                    LEVEL {{ currentLevel }}<br>
-                    <small>SPEED INCREASED!</small>
+                <div v-if="showLevelUp" class="level-up-banner">
+                    <div class="banner-line"></div>
+                    <div class="banner-content">LEVEL {{ currentLevel }}</div>
+                    <div class="banner-line"></div>
                 </div>
             </transition>
         </div>
 
         <div class="text-center mt-4">
-            <a href="profile.html" class="pixel-link">← RETURN TO CHARACTER SHEET</a>
+            <a href="profile.html" class="pixel-link opacity-50 text-decoration-none">← EXIT TO CHARACTER SHEET</a>
         </div>
     </div>
 
@@ -91,22 +108,18 @@
                     <a href="profile.html">CHARACTER SHEET</a>
                     <a href="quests.html">QUEST LOG</a>
                     <a href="guild.html">GUILD SIGN-IN</a>
-                    <hr class="border-secondary my-3">
+                    <hr class="border-secondary my-3 opacity-25">
                     <a href="#" @click.prevent="togglePause" class="text-warning">RESUME GAME</a>
                 </nav>
             </div>
         </div>
     </transition>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
 <script src="js/config.js"></script>
-
 <script src="js/main.js"></script>
 <script src="js/bouncer.js"></script>
-
 </body>
 </html>
