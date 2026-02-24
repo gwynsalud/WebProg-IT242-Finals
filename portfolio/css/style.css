@@ -18,7 +18,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px;
+  /* scroll-padding-top: 80px; */
 }
 
 html, body {
@@ -31,7 +31,7 @@ html, body {
 /* ===== TYPOGRAPHY ===== */
 body {
   font-family: 'Press Start 2P', cursive;
-  padding-top: 20px;
+  /* padding-top: 20px; */
 }
 
 section {
