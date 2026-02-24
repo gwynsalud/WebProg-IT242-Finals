@@ -68,6 +68,13 @@
             >
                 <span class="npc-icon">{{ npc.icon }}</span>
             </div>
+
+            <transition name="pop">
+                <div v-if="showLevelUp" class="level-up-text">
+                    LEVEL {{ currentLevel }}<br>
+                    <small>SPEED INCREASED!</small>
+                </div>
+            </transition>
         </div>
 
         <div class="text-center mt-4">

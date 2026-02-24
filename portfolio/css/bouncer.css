@@ -89,3 +89,37 @@
     background: #fff;
     box-shadow: 2px 2px 0px #b8860b;
 }
+
+/* Add this to your existing bouncer.css */
+.npc-character[style*="borderColor: #ffd700"] {
+    animation: pulse-gold 1s infinite alternate;
+    z-index: 10;
+}
+
+@keyframes pulse-gold {
+    from { box-shadow: 0 0 10px #ffd700; transform: scale(1); }
+    to { box-shadow: 0 0 25px #fff; transform: scale(1.1); }
+}
+
+.level-up-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Press Start 2P', cursive;
+    color: #ffd700;
+    text-align: center;
+    font-size: 2rem;
+    text-shadow: 4px 4px 0px #000;
+    z-index: 200;
+    pointer-events: none;
+}
+
+/* Level up animation */
+.pop-enter-active { animation: level-pop 1.5s; }
+@keyframes level-pop {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    80% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -100%) scale(1); opacity: 0; }
+}

@@ -1,11 +1,10 @@
 /**
  * bouncer.js
  * Extends the global rootConfig with Tavern Patrol game logic.
- * Updated for Coffee/Sleep theme and Full-Screen layout.
+ * Features: Aggressive score-based scaling (every 100pts) & Level Up alerts.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Ensure the global config exists
     if (!window.rootConfig) {
         console.error("Global rootConfig not found. Make sure main.js is loaded before bouncer.js.");
         return;
@@ -13,32 +12,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const { createApp } = Vue;
 
-    // 2. Define the Game-Specific Data
     const gameData = {
         gameActive: false,
         gameScore: 0,
         gameLives: 3,
         difficulty: 1.0,
+        currentLevel: 1,
+        showLevelUp: false,
         activeNPCs: [],
         npcIdCounter: 0,
         gameLoopInterval: null,
         spawnRate: 0.03,
-        stageWidth: 1000 // Updated to match wider CSS
+        stageWidth: 1000 
     };
 
-    // 3. Define the Game-Specific Methods
     const gameMethods = {
         startBouncerGame() {
             this.gameScore = 0;
             this.gameLives = 3;
             this.difficulty = 1.0;
+            this.currentLevel = 1;
             this.activeNPCs = [];
             this.gameActive = true;
 
             if (this.gameLoopInterval) clearInterval(this.gameLoopInterval);
 
             this.gameLoopInterval = setInterval(() => {
-                // We check isPaused (from main.js) to pause the game loop!
                 if (this.gameActive && !this.isPaused) {
                     this.updateGame();
                 }
@@ -46,10 +45,18 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         updateGame() {
-            // Difficulty ramps slightly over time
-            this.difficulty += 0.0005;
+            // 1. AGGRESSIVE SCALING: Speed increases every 100 points
+            const newLevel = Math.floor(this.gameScore / 100) + 1;
+            
+            if (newLevel > this.currentLevel) {
+                this.triggerLevelUp(newLevel);
+            }
 
-            if (Math.random() < this.spawnRate * this.difficulty) {
+            // Difficulty formula: Base + (Level-1) * 0.25 (e.g., Level 5 is 2x speed)
+            this.difficulty = 1 + (this.currentLevel - 1) * 0.25;
+
+            // Spawn rate also increases with score
+            if (Math.random() < this.spawnRate * (1 + this.gameScore / 500)) {
                 this.spawnNPC();
             }
 
@@ -57,31 +64,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 const npc = this.activeNPCs[i];
                 npc.x += npc.speed * this.difficulty;
 
-                // Check if NPC left the stage bounds
                 if (npc.x > this.stageWidth) {
-                    // Penalty if a Sleeper (baddie) reaches the other side!
-                    if (npc.type === 'baddie') {
-                        this.loseLife();
-                    }
+                    if (npc.type === 'baddie') this.loseLife();
                     this.activeNPCs.splice(i, 1);
                 }
             }
         },
 
+        triggerLevelUp(lvl) {
+            this.currentLevel = lvl;
+            this.showLevelUp = true;
+            this.playEffect('levelup');
+            setTimeout(() => { this.showLevelUp = false; }, 1500);
+        },
+
         spawnNPC() {
-            const isBaddie = Math.random() > 0.5;
-            const types = {
-                // The "Troublemaker" is now someone falling asleep!
-                baddie: { icon: '💤', color: '#ff4d4d', type: 'baddie' }, 
-                // The "Guest" is a fresh coffee
-                guest: { icon: '☕', color: '#4dff88', type: 'guest' }
-            };
-            const selected = isBaddie ? types.baddie : types.guest;
+            const roll = Math.random();
+            let selected;
+            
+            if (roll < 0.05) {
+                selected = { icon: '🌟', color: '#ffd700', type: 'powerup' };
+            } else if (roll < 0.55) {
+                selected = { icon: '💤', color: '#ff4d4d', type: 'baddie' };
+            } else {
+                selected = { icon: '☕', color: '#4dff88', type: 'guest' };
+            }
 
             this.activeNPCs.push({
                 id: this.npcIdCounter++,
-                x: -60, // Start slightly further back
-                // Y-axis randomized for the new 600px height
+                x: -60,
                 y: Math.random() * (550 - 50) + 50, 
                 speed: Math.random() * 2 + 2,
                 ...selected
@@ -92,30 +103,28 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!this.gameActive || this.isPaused) return;
 
             if (npc.type === 'baddie') {
-                // Good job! You woke them up.
                 this.gameScore += 10;
                 this.playEffect('hit');
+            } else if (npc.type === 'powerup') {
+                this.gameScore += 50;
+                this.activeNPCs = this.activeNPCs.filter(n => n.type !== 'baddie');
+                this.playEffect('powerup');
             } else {
-                // Oh no! You spilled the coffee.
                 this.gameScore = Math.max(0, this.gameScore - 20);
                 this.loseLife();
                 this.playEffect('error');
             }
-            // Remove character immediately on click
             this.activeNPCs = this.activeNPCs.filter(n => n.id !== npc.id);
         },
 
         loseLife() {
             this.gameLives--;
-            if (this.gameLives <= 0) {
-                this.endGame();
-            }
+            if (this.gameLives <= 0) this.endGame();
         },
 
         endGame() {
             this.gameActive = false;
             clearInterval(this.gameLoopInterval);
-            
             const best = localStorage.getItem('tavern_high_score') || 0;
             if (this.gameScore > best) {
                 localStorage.setItem('tavern_high_score', this.gameScore);
@@ -125,28 +134,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
 
-        playEffect(type) {
-            console.log(`Tavern Sfx: ${type}`);
-        }
+        playEffect(type) { console.log(`Tavern Sfx: ${type}`); }
     };
 
-    // 4. Merge the Global Config with the Game Logic
     const finalConfig = {
         ...window.rootConfig,
-        data() {
-            return {
-                ...window.rootConfig.data(),
-                ...gameData
-            };
-        },
-        methods: {
-            ...window.rootConfig.methods,
-            ...gameMethods
-        },
+        data() { return { ...window.rootConfig.data(), ...gameData }; },
+        methods: { ...window.rootConfig.methods, ...gameMethods },
         mounted: window.rootConfig.mounted,
         computed: window.rootConfig.computed
     };
 
-    // 5. Finally, mount the app
     createApp(finalConfig).mount('#app');
 });
