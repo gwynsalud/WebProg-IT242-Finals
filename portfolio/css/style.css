@@ -2222,3 +2222,36 @@ canvas {
     from { transform: translateY(0); }
     to { transform: translateY(-15px); }
 }
+
+.mode-card {
+      height: 65vh;
+      transition: transform 0.3s ease;
+      background: #0a0a0a;
+    }
+    
+    .mode-card:hover {
+      transform: translateY(-10px);
+      border-color: #ffc107 !important;
+    }
+
+    .mode-icon {
+      font-size: 4rem;
+      margin-bottom: 2rem;
+      display: block;
+    }
+
+    .path-title {
+      color: #ffc107;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quest-list {
+      font-size: 0.7rem;
+      color: #aaa;
+      text-align: left;
+      list-style: none;
+      padding: 0;
+      line-height: 2;
+    }
