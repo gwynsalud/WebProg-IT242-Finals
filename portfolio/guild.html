@@ -50,6 +50,18 @@
       from { transform: translateY(0); }
       to { transform: translateY(-20px); }
     }
+
+    /* Additional Scrollbar Styling (Optional) */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #ffcc00;
+      border: 2px solid #1a1a1a;
+    }
   </style>
 </head>
 
@@ -77,23 +89,24 @@
       </div>
     </transition>
 
-    <section id="guestbook" class="py-5 min-vh-100 bg-black text-white">
+    <section id="guestbook" class="bg-black text-white">
       <div class="container">
-        <h2 class="rpg-title text-center mb-5">GUILD SIGN-IN SHEET</h2>
+        <h2 class="rpg-title text-center mb-4">GUILD SIGN-IN SHEET</h2>
 
-        <div class="row justify-content-center g-5">
+        <div class="row justify-content-center g-4">
+          
           <div class="col-md-6">
-            <div class="terminal-window p-4 mb-4">
-              <div class="window-top p-2">NEW ENTRY: SIGN THE LEDGER</div>
-              <form @submit.prevent="addEntry" class="p-1 p-md-3">
-
-                <div class="d-flex align-items-center mb-4 gap-3 p-3 bg-dark border-pixel">
+            <div class="terminal-window border-pixel">
+              <div class="window-top p-2 mb-3">NEW ENTRY: SIGN THE LEDGER</div>
+              
+              <form @submit.prevent="addEntry">
+                <div class="d-flex align-items-center mb-3 gap-3 p-2 bg-dark border-pixel">
                   <div class="avatar-preview-box">
-                    <img :src="selectedAvatar" alt="Preview" class="pixel-avatar-lg">
+                    <img :src="selectedAvatar" alt="Preview" class="pixel-avatar-md">
                   </div>
                   <div>
-                    <label class="quest-label d-block">CHOSEN CLASS</label>
-                    <span class="text-warning font-press-start" style="font-size: 0.8rem;">{{ selectedClass.toUpperCase() }}</span>
+                    <label class="quest-label d-block" style="font-size: 0.6rem;">CHOSEN CLASS</label>
+                    <span class="text-warning font-press-start" style="font-size: 0.7rem;">{{ selectedClass.toUpperCase() }}</span>
                   </div>
                 </div>
 
@@ -104,21 +117,20 @@
 
                 <div class="mb-3">
                   <label class="form-label quest-label">SELECT YOUR CLASS</label>
-                  <div class="d-flex flex-wrap gap-2 mt-2">
+                  <div class="d-flex flex-wrap gap-2 mt-1">
                     <button v-for="job in classes" :key="job.name" type="button" class="pixel-tab-sm"
-                      :class="{ 'active-tab': selectedClass === job.name }" @click="selectClass(job)">
+                      :class="{ 'active-tab': selectedClass === job.name }" @click="selectClass(job)" style="font-size: 0.5rem;">
                       {{ job.icon }} {{ job.name }}
                     </button>
                   </div>
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-3">
                   <label class="form-label quest-label">MESSAGE</label>
-                  <textarea v-model="newMessage" class="rpg-input w-100" rows="3" placeholder="Leave a word for the dev..."
-                    required></textarea>
+                  <textarea v-model="newMessage" class="rpg-input w-100" placeholder="Leave a word for the dev..." required></textarea>
                 </div>
 
-                <button type="submit" class="rpg-btn-gold w-100" :class="{ 'success-state': submitted }" :disabled="submitted">
+                <button type="submit" class="rpg-btn-gold" :class="{ 'success-state': submitted }" :disabled="submitted">
                   <span v-if="!submitted">SIGN LEDGER</span>
                   <span v-else>✔ QUEST COMPLETE!</span>
                 </button>
@@ -129,7 +141,8 @@
           <div class="col-md-5">
             <div class="ledger-box p-4 border-pixel">
               <h3 class="stat-header mb-4">RECENT VISITORS</h3>
-              <div class="visitor-list custom-scrollbar" style="max-height: 600px; overflow-y: auto;">
+              
+              <div class="visitor-list custom-scrollbar">
                 
                 <div v-if="isLoading" class="ledger-loader">
                   <div class="pixel-dots">
@@ -180,4 +193,5 @@
   <script src="js/main.js"></script>
 
 </body>
+
 </html>
