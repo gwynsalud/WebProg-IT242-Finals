@@ -50,7 +50,7 @@
                 :key="npc.id" 
                 class="npc-character"
                 :class="npc.type"
-                :style="{ left: npc.x + 'px', top: npc.y + 'px' }"
+                :style="{ left: npc.x + 'px', top: npc.y + 'px', borderColor: npc.color }"
                 @mousedown.prevent="bonk(npc)"
             >
                 {{ npc.icon }}
@@ -59,12 +59,12 @@
             <transition name="fade">
                 <div v-if="!gameActive" class="game-overlay">
                     <div class="overlay-card">
-                        <h2 v-if="gameLives <= 0" class="text-danger pulse">SHIFT FAILED</h2>
-                        <h2 v-else>READY?</h2>
+                        <h2 v-if="gameLives <= 0" class="text-danger pulse mb-4">SHIFT FAILED</h2>
+                        <h2 v-else class="mb-4">READY?</h2>
                         
-                        <div class="instruction-box my-4">
-                            <p>BONK Sleepers <span class="badge bg-danger">💤</span></p>
-                            <p>LEAVE Coffee <span class="badge bg-success">☕</span></p>
+                        <div class="instruction-box mb-4">
+                            <p class="mb-2">BONK Sleepers <span class="badge-icon red">💤</span></p>
+                            <p class="mb-0">LEAVE Coffee <span class="badge-icon green">☕</span></p>
                         </div>
                         
                         <button class="pixel-btn-yellow" @click="startBouncerGame">
