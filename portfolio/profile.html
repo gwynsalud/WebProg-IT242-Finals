@@ -21,6 +21,28 @@
 <body>
       <div id="app" v-cloak>
 
+    <nav class="story-hud bg-black border-pixel-bottom">
+  <div class="container-fluid px-4">
+    <div class="d-flex align-items-center justify-content-between py-2">
+      <div class="story-nav-scroll d-flex gap-2">
+        <a href="profile.html" class="story-nav-item">PROFILE</a>
+        <a href="training.html" class="story-nav-item">TRAINING GROUNDS</a>
+        <a href="skills.html" class="story-nav-item">SKILL TREE</a>
+        <a href="objectives.html" class="story-nav-item">OBJECTIVES</a>
+        <a href="archive.html" class="story-nav-item">MEMORY ARCHIVE</a>
+        <a href="quests.html" class="story-nav-item">QUESTS</a>
+        <a href="side-quests.html" class="story-nav-item">SIDE QUESTS</a>
+        <a href="resources.html" class="story-nav-item text-nowrap">SCHOLAR'S DECK</a>
+        <a href="guild.html" class="story-nav-item">GUILD</a>
+      </div>
+
+      <button class="pause-btn-static ms-3" @click="togglePause">
+        〓 MENU
+      </button>
+    </div>
+  </div>
+</nav>
+
     <button class="pause-btn" v-on:click="togglePause">
     <span v-if="!isPaused">〓 MENU</span>
     <span v-else>▶ RESUME</span>
