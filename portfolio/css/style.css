@@ -18,7 +18,6 @@
 
 html {
   scroll-behavior: smooth;
-  /* scroll-padding-top: 80px; */
 }
 
 html, body {
@@ -31,12 +30,7 @@ html, body {
 /* ===== TYPOGRAPHY ===== */
 body {
   font-family: 'Press Start 2P', cursive;
-  padding-top: 110px;;
-}
-
-section {
-  padding-top: 60px;
-  margin-top: -20px;
+  padding-top: 0 !important;;
 }
 
 .rpg-title {
@@ -197,6 +191,45 @@ canvas {
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+.story-hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.95); /* Slight transparency for a glass look */
+    /* Moves the HUD up by its own height. Adjust -100px based on your HUD size */
+    transform: translateY(-90%); 
+    transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28); /* Bouncy game transition */
+}
+
+/* This is the trigger area. When the mouse enters the top of the screen */
+.story-hud:hover {
+    transform: translateY(0);
+}
+
+/* Optional: Add a "Pull Tab" indicator so users know something is there */
+.story-hud::after {
+    content: '▼ NAVIGATION ▼';
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffc107;
+    color: #000;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5rem;
+    padding: 5px 15px;
+    border-radius: 0 0 8px 8px;
+    border: 2px solid #8b4513;
+    pointer-events: none; /* Mouse goes through the tab to trigger the hover */
+    opacity: 0.8;
+}
+
+.story-hud:hover::after {
+    opacity: 0; /* Hide the tab when the menu is open */
 }
 
 /* ========================================
