@@ -13,10 +13,28 @@
 
 <div id="app" v-cloak>
     
-    <button class="pause-btn" @click="togglePause">
-        <span v-if="!isPaused">〓 MENU</span>
-        <span v-else>▶ RESUME</span>
-    </button>
+    <button class="pause-btn" v-on:click="togglePause">
+    <span v-if="!isPaused">〓 MENU</span>
+    <span v-else>▶ RESUME</span>
+  </button>
+
+  <transition name="fade">
+    <div v-if="isPaused" class="pause-overlay" @click.self="togglePause">
+      <div class="pixel-box menu-content text-center">
+        <h2 class="menu-title mb-5">- GAME PAUSED -</h2>
+        
+        <nav class="menu-links">
+          <a href="index.html" class="menu-item">START MENU</a>
+          <a href="index.html#characters" class="menu-item">CHARACTER SELECTION</a>
+          <a href="profile.html" class="menu-item">TRAINING GROUNDS</a>
+          <a href="quests.html" class="menu-item">QUEST LOG</a>
+          <a href="guild.html" class="menu-item">GUILD LEDGER</a>
+          <a href="resources.html" class="menu-item">THE SCHOLAR's DECK</a>
+        </nav>
+      </div>
+    </div>
+  </transition>
+
 
     <div class="game-container">
         
@@ -86,19 +104,6 @@
         </footer>
     </div>
 
-    <transition name="fade">
-        <div v-if="isPaused" class="pause-overlay" @click.self="togglePause">
-            <div class="menu-content text-center">
-                <h2 class="menu-title">- PAUSED -</h2>
-                <nav class="menu-links">
-                    <a href="index.html">MAIN LOBBY</a>
-                    <a href="profile.html">CHARACTER SHEET</a>
-                    <hr class="opacity-25 my-3">
-                    <a href="#" @click.prevent="togglePause" class="text-warning">RESUME</a>
-                </nav>
-            </div>
-        </div>
-    </transition>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
