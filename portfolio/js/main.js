@@ -1,9 +1,9 @@
 // js/main.js
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Safety check: ensure our config variables exist before proceeding
-    if (typeof supabaseUrl === 'undefined' || typeof supabaseKey === 'undefined') {
-        console.error("Configuration missing! Make sure config.js is loaded before main.js.");
+    // MATCHING CONFIG.JS: Check if the credentials exist
+    if (typeof SUPABASE_URL === 'undefined' || typeof SUPABASE_ANON_KEY === 'undefined') {
+        console.error("Configuration missing! Make sure config.js defines SUPABASE_URL and SUPABASE_ANON_KEY.");
         return;
     }
 
@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 newMessage: '',
                 submitted: false,
                 entries: [],
-                // API REQUIREMENT: Constructing the REST URL for the 'visitors' table
-                apiUrl: `${supabaseUrl}/rest/v1/visitors`,
+                // API REQUIREMENT: Using the fetch URL with the correct config variable
+                apiUrl: `${SUPABASE_URL}/rest/v1/visitors`,
 
                 // --- CLASS SELECTION DATA ---
                 selectedClass: localStorage.getItem('hero_class') || 'Scholar',
@@ -70,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         methods: {
-            // --- GLOBAL UI METHODS ---
             togglePause() {
                 this.isPaused = !this.isPaused;
                 document.body.style.overflow = this.isPaused ? 'hidden' : '';
@@ -103,14 +102,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.userClass = job.name;
             },
 
-            // --- API REQUIREMENT: FETCH METHODS ---
+            // --- API REQUIREMENT: FETCH METHODS (Corrected Headers) ---
             async fetchEntries() {
                 try {
                     const response = await fetch(`${this.apiUrl}?select=*&order=created_at.desc`, {
                         method: 'GET',
                         headers: {
-                            'apikey': supabaseKey,
-                            'Authorization': `Bearer ${supabaseKey}`
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
                         }
                     });
                     if (!response.ok) throw new Error('API fetch failed');
@@ -129,8 +128,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         method: 'POST',
                         headers: { 
                             'Content-Type': 'application/json',
-                            'apikey': supabaseKey,
-                            'Authorization': `Bearer ${supabaseKey}`,
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
                             'Prefer': 'return=representation' 
                         },
                         body: JSON.stringify({
@@ -144,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (response.ok) {
                         this.newName = ''; 
                         this.newMessage = '';
-                        await this.fetchEntries(); // Refresh list via API
+                        await this.fetchEntries();
                         setTimeout(() => { this.submitted = false; }, 3000);
                     } else {
                         throw new Error('Post failed');
@@ -164,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
 
             initRealtimeListener() {
+                // Using supabaseClient as defined in your config.js
                 supabaseClient
                     .channel('public:visitors')
                     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'visitors' }, 
@@ -173,7 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }).subscribe();
             },
 
-            // --- MISC UI ---
             initSkillHoverEffects() {
                 const skillItems = document.querySelectorAll('.skill-item');
                 const descBox = document.getElementById('skill-desc');
@@ -199,7 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- MOUNT LOGIC ---
-    // Only mount if we aren't on a page that handles its own mounting (like bouncer.js)
     const isBouncerPage = window.location.pathname.includes('bouncer.html');
     if (!isBouncerPage) {
         Vue.createApp(window.rootConfig).mount('#app');
