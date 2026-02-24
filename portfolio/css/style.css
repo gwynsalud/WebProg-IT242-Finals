@@ -1659,13 +1659,11 @@ canvas {
 }
 
 #guestbook {
-    height: 100vh; 
-    max-height: 100vh;
-    overflow: hidden; /* Prevents the section itself from scrolling */
+    height: 100vh;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 2vh 0; /* Uses viewport units for consistent spacing */
 }
 
 #guestbook .container {
@@ -1677,7 +1675,37 @@ canvas {
 
 #guestbook .row {
     flex: 1;
-    overflow: hidden; /* Prevents the row from expanding the page */
+    height: 80vh; 
+    overflow: hidden;
+    align-items: flex-start;
+}
+
+#guestbook .col-md-6 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.terminal-window {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 1.5rem !important;
+}
+
+/* Allow the form itself to be a flex container */
+.terminal-window form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* This pushes the button to the bottom */
+}
+
+/* Shrink the message box slightly to make room for the button */
+.terminal-window textarea.rpg-input {
+    flex: 0 1 100px; /* Allows it to shrink if needed */
+    margin-bottom: 10px;
 }
 
 #guestbook .rpg-btn-gold:hover {
