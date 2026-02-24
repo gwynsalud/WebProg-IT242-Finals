@@ -8,7 +8,7 @@
   <title>Guild Ledger | Gwen's Profile</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -16,109 +16,40 @@
   <link rel="stylesheet" href="css/style.css">
 
   <style>
-    /* 1. LAYOUT LOCK: Making the section full-screen without body scroll */
-    #guestbook {
-      height: 100vh;
-      max-height: 100vh;
-      overflow: hidden; /* Lock the main section */
-      display: flex;
-      flex-direction: column;
-      padding: 2vh 0;
-    }
-
-    #guestbook .container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    #guestbook .row {
-      flex: 1;
-      overflow: hidden;
-      align-items: stretch;
-    }
-
-    /* 2. FORM COLUMN: Ensuring the button stays at the bottom */
-    .terminal-window {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      padding: 1.5rem !important;
-    }
-
-    .terminal-window form {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between; /* Pushes button to bottom */
-      overflow: hidden;
-    }
-
-    /* Textarea scales to fit remaining space */
-    .terminal-window textarea.rpg-input {
-      flex: 1; 
-      min-height: 80px;
-      margin-bottom: 1rem;
-    }
-
-    /* 3. LEDGER COLUMN: Internal scrolling only */
-    .ledger-box {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .visitor-list {
-      flex: 1;
-      overflow-y: auto !important; /* This is the ONLY scrollable area */
-      padding-right: 10px;
-    }
-
-    /* 4. TEXT REFINEMENTS: Smaller sizes for message and date */
-    .visitor-msg { 
-      font-size: 0.75rem !important; 
-      line-height: 1.4;
-    }
-    
-    .visitor-date { 
-      font-size: 0.6rem !important;
-      opacity: 0.8;
-    }
-
-    .visitor-name { font-size: 0.8rem !important; }
-
-    /* Match button width to inputs exactly */
-    .rpg-btn-gold {
-      width: 100%;
-      box-sizing: border-box;
-      flex-shrink: 0;
-      padding: 12px;
-    }
-
-    /* Spinner Animation */
+    /* Integrated Loading Styles */
     .ledger-loader {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px;
+      padding: 60px 20px;
       color: #ffc107;
       font-family: 'Press Start 2P', cursive;
-      font-size: 0.6rem;
+      font-size: 0.7rem;
       text-align: center;
     }
 
-    .pixel-dots { display: flex; gap: 10px; margin-bottom: 20px; }
+    .pixel-dots {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
     .dot {
-      width: 12px; height: 12px;
+      width: 15px;
+      height: 15px;
       background: #ffc107;
-      box-shadow: 2px 2px 0px #8b4513;
+      box-shadow: 3px 3px 0px #8b4513;
       animation: jump 0.6s infinite alternate;
     }
+
     .dot:nth-child(2) { animation-delay: 0.2s; }
     .dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes jump { from { transform: translateY(0); } to { transform: translateY(-15px); } }
+
+    @keyframes jump {
+      from { transform: translateY(0); }
+      to { transform: translateY(-20px); }
+    }
   </style>
 </head>
 
@@ -146,23 +77,23 @@
       </div>
     </transition>
 
-    <section id="guestbook" class="bg-black text-white">
+    <section id="guestbook" class="py-5 min-vh-100 bg-black text-white">
       <div class="container">
-        <h2 class="rpg-title text-center mb-4">GUILD SIGN-IN SHEET</h2>
+        <h2 class="rpg-title text-center mb-5">GUILD SIGN-IN SHEET</h2>
 
-        <div class="row justify-content-center g-4">
+        <div class="row justify-content-center g-5">
           <div class="col-md-6">
-            <div class="terminal-window border-pixel">
-              <div class="window-top p-2 mb-3">NEW ENTRY: SIGN THE LEDGER</div>
-              
-              <form @submit.prevent="addEntry">
-                <div class="d-flex align-items-center mb-3 gap-3 p-2 bg-dark border-pixel">
+            <div class="terminal-window p-4 mb-4">
+              <div class="window-top p-2">NEW ENTRY: SIGN THE LEDGER</div>
+              <form @submit.prevent="addEntry" class="p-1 p-md-3">
+
+                <div class="d-flex align-items-center mb-4 gap-3 p-3 bg-dark border-pixel">
                   <div class="avatar-preview-box">
-                    <img :src="selectedAvatar" alt="Preview" class="pixel-avatar-md">
+                    <img :src="selectedAvatar" alt="Preview" class="pixel-avatar-lg">
                   </div>
                   <div>
-                    <label class="quest-label d-block" style="font-size: 0.6rem;">CHOSEN CLASS</label>
-                    <span class="text-warning font-press-start" style="font-size: 0.7rem;">{{ selectedClass.toUpperCase() }}</span>
+                    <label class="quest-label d-block">CHOSEN CLASS</label>
+                    <span class="text-warning font-press-start" style="font-size: 0.8rem;">{{ selectedClass.toUpperCase() }}</span>
                   </div>
                 </div>
 
@@ -173,20 +104,21 @@
 
                 <div class="mb-3">
                   <label class="form-label quest-label">SELECT YOUR CLASS</label>
-                  <div class="d-flex flex-wrap gap-2 mt-1">
+                  <div class="d-flex flex-wrap gap-2 mt-2">
                     <button v-for="job in classes" :key="job.name" type="button" class="pixel-tab-sm"
-                      :class="{ 'active-tab': selectedClass === job.name }" @click="selectClass(job)" style="font-size: 0.5rem;">
+                      :class="{ 'active-tab': selectedClass === job.name }" @click="selectClass(job)">
                       {{ job.icon }} {{ job.name }}
                     </button>
                   </div>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-4">
                   <label class="form-label quest-label">MESSAGE</label>
-                  <textarea v-model="newMessage" class="rpg-input w-100" placeholder="Leave a word for the dev..." required></textarea>
+                  <textarea v-model="newMessage" class="rpg-input w-100" rows="3" placeholder="Leave a word for the dev..."
+                    required></textarea>
                 </div>
 
-                <button type="submit" class="rpg-btn-gold" :class="{ 'success-state': submitted }" :disabled="submitted">
+                <button type="submit" class="rpg-btn-gold w-100" :class="{ 'success-state': submitted }" :disabled="submitted">
                   <span v-if="!submitted">SIGN LEDGER</span>
                   <span v-else>✔ QUEST COMPLETE!</span>
                 </button>
@@ -197,11 +129,13 @@
           <div class="col-md-5">
             <div class="ledger-box p-4 border-pixel">
               <h3 class="stat-header mb-4">RECENT VISITORS</h3>
-              
-              <div class="visitor-list custom-scrollbar">
+              <div class="visitor-list custom-scrollbar" style="max-height: 600px; overflow-y: auto;">
+                
                 <div v-if="isLoading" class="ledger-loader">
                   <div class="pixel-dots">
-                    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
                   </div>
                   <p>CONSULTING THE ANCIENT SCROLLS...</p>
                 </div>
@@ -226,11 +160,11 @@
                   </div>
 
                   <div v-if="entries.length === 0" class="text-secondary text-center py-5">
-                    The ledger is empty. Be the first to join.
+                    The ledger is empty. Be the first to join the guild.
                   </div>
                 </template>
-              </div>
 
+              </div>
             </div>
           </div>
         </div>
