@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 newMessage: '',
                 submitted: false,
                 entries: [],
-                apiUrl: `${SUPABASE_URL}/rest/v1/visitors`,
+                apiUrl: '/api/guild/sign',
 
                 // --- CLASS SELECTION DATA ---
                 selectedClass: localStorage.getItem('hero_class') || 'Scholar',
