@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 newMessage: '',
                 submitted: false,
                 entries: [],
-                apiUrl: '/api/guild/sign',
+                apiUrl: '/api/guild',
 
                 // --- CLASS SELECTION DATA ---
                 selectedClass: localStorage.getItem('hero_class') || 'Scholar',
