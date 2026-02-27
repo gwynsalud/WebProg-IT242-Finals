@@ -1,17 +1,28 @@
-import { Injectable } from '@nestjs/common';
-import { createClient } from '@supabase/supabase-js';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 @Injectable()
-export class GuildService {
-  // Use environment variables for security! 
-  private supabase = createClient(
-    process.env.SUPABASE_URL!, 
-    process.env.SUPABASE_ANON_KEY!
-  );
+export class GuildService implements OnModuleInit {
+  private supabase: SupabaseClient;
+
+  // This runs after the ConfigModule has loaded the variables
+  onModuleInit() {
+    const url = process.env.SUPABASE_URL || '';
+    const key = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || '';
+
+    if (!url || !key) {
+      console.error('CRITICAL: Supabase URL or Key is missing from Environment Variables!');
+      return;
+    }
+
+    this.supabase = createClient(url, key);
+  }
 
   async addEntry(visitorData: any) {
+    if (!this.supabase) throw new Error('Database not initialized');
+    
     const { data, error } = await this.supabase
-      .from('visitors') // Matches your current table name
+      .from('visitors')
       .insert([visitorData]);
     
     if (error) throw error;
@@ -19,6 +30,8 @@ export class GuildService {
   }
 
   async getEntries() {
+    if (!this.supabase) throw new Error('Database not initialized');
+
     const { data, error } = await this.supabase
       .from('visitors')
       .select('*')
