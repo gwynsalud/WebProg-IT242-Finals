@@ -1,16 +1,8 @@
 {
-  "name": "portfolio",
+  "name": "rpg-portfolio-monorepo",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "@supabase/supabase-js": "^2.97.0"
+    "build": "cd backend && npm install && npm run build"
   }
 }

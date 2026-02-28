@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Gwen's Profile</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+<div id="app" v-cloak>
+
+  <!-- ================= NAVIGATION BAR ================= -->
+  
+  <div class="hud-trigger-zone"></div>
+    <nav class="story-hud bg-black border-pixel-bottom">
+      <div class="container-fluid px-4">
+        <div class="d-flex align-items-center justify-content-between py-2">
+          <div class="story-nav-scroll d-flex gap-2">
+            <a href="profile.html#about" class="story-nav-item">PROFILE</a>
+            <a href="profile.html#education" class="story-nav-item">TRAINING</a>
+            <a href="profile.html#skills" class="story-nav-item">SKILLS</a>
+            <a href="profile.html#goals" class="story-nav-item">OBJECTIVES</a>
+            <a href="profile.html#gallery" class="story-nav-item">ARCHIVE</a>
+            <a href="quests.html#experience" class="story-nav-item">QUESTS</a>
+            <a href="quests.html#interests" class="story-nav-item">SIDE QUESTS</a>
+            <a href="resources.html" class="story-nav-item">RESOURCES</a>
+            <a href="guild.html" class="story-nav-item">GUILD</a>
+          </div>
+        </div>
+
+        <div class="xp-container pb-2 d-flex align-items-center gap-3">
+          <span class="quest-label" style="font-size: 0.5rem; color: #ffc107;">XP</span>
+          <div class="xp-bar-bg border-pixel-sm w-100" style="height: 10px; background: #222;">
+            <div class="xp-bar-fill" style="width: 45%; height: 100%; background: #ffc107; box-shadow: inset -4px 0 0 #b8860b;"></div>
+          </div>
+          <span class="quest-label" style="font-size: 0.5rem; white-space: nowrap;">LVL 01</span>
+        </div>
+      </div>
+    </nav>
+
+    <button class="pause-btn" v-on:click="togglePause">
+      <span v-if="!isPaused">〓 MENU</span>
+      <span v-else>▶ RESUME</span>
+    </button>
+
+    <transition name="fade">
+      <div v-if="isPaused" class="pause-overlay" @click.self="togglePause">
+        <div class="pixel-box menu-content text-center">
+          <h2 class="menu-title mb-5">- GAME PAUSED -</h2>
+          
+          <nav class="menu-links">
+            <a href="index.html" class="menu-item">START MENU</a>
+            <a href="index.html#characters" class="menu-item">CHARACTER SELECTION</a>
+            <a href="modes.html" class="menu-item">MODE SELECTION</a>
+            <a href="profile.html#about" class="menu-item">PLAYER PROFILE</a>
+            <a href="resources.html" class="menu-item">THE SCHOLAR's DECK</a>
+            <a href="guild.html" class="menu-item">GUILD LEDGER</a>
+          </nav>
+        </div>
+      </div>
+    </transition>
+
+  <!-- ================= EXPERIENCE SECTION ================= -->
+
+    <section id="experience" class="py-5 min-vh-100">
+      <div class="container">
+        <h2 class="rpg-title text-center mb-5">Quest Log</h2>
+
+        <div class="experience-timeline">
+          <div class="exp-card mb-5">
+            <div class="exp-header d-flex justify-content-between align-items-center">
+              <div>
+                <span class="exp-rank">ROLE: DEVELOPER</span>
+                <h3 class="company-guild">CAMPUS VISITOR REGISTRATION SYSTEM</h4>
+              </div>
+              <div class="exp-date text-end">
+                <span class="badge-date">SEPT 2025 - NOV 2025</span>
+              </div>
+            </div>
+
+            <div class="exp-body mt-3">
+              <div class="quest-objectives">
+                <div class="obj-title">QUEST OBJECTIVES:</div>
+                <ul>
+                  <li>Design a mobile-friendly user interface for visitor registration.</li>
+                  <li>Store and retrieve visitor data securely.</li>
+                  <li>Ensure smooth navigation between app screens.</li>
+                </ul>
+              </div>
+              
+              <div class="exp-loot mt-3">
+                <span class="loot-label">LOOT GAINED:</span>
+                <div class="loot-items">
+                    <span class="loot-tag">UI/UX</span>
+                    <span class="loot-tag">Outsystems</span>
+                    <span class="loot-tag">Mobile App</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-card mb-5">
+            <div class="exp-header d-flex justify-content-between align-items-center">
+              <div>
+                <span class="exp-rank">ROLE: DEVELOPER</span>
+                <h4 class="company-guild">SARI-SARI TRADE SYSTEM</h4>
+              </div>
+              <div class="exp-date text-end">
+                <span class="badge-date">MAY 2025 - JUNE 2025</span>
+              </div>
+            </div>
+
+            <div class="exp-body mt-3">
+              <div class="quest-objectives">
+                <div class="obj-title">QUEST OBJECTIVES:</div>
+                <ul>
+                  <li>Build a web-based barter system for community food trading.</li>
+                  <li>Enable CRUD operations for food listings.</li>
+                  <li>Display public listings with ownership-based permissions.</li>
+                </ul>
+              </div>
+              
+              <div class="exp-loot mt-3">
+                <span class="loot-label">LOOT GAINED:</span>
+                <div class="loot-items">
+                    <span class="loot-tag">Firebase</span>
+                    <span class="loot-tag">Cloudinary</span>
+                    <span class="loot-tag">Full-Stack</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-card mb-5">
+            <div class="exp-header d-flex justify-content-between align-items-center">
+              <div>
+                <span class="exp-rank">RANK: LEAD DEVELOPER</span>
+                <h4 class="company-guild">EARTHQUAKE MANAGEMENT SYSTEM</h4>
+              </div>
+              <div class="exp-date text-end">
+                <span class="badge-date">FEB 2025 - MAR 2025</span>
+              </div>
+            </div>
+
+            <div class="exp-body mt-3">
+              <div class="quest-objectives">
+                <div class="obj-title">QUEST OBJECTIVES:</div>
+                <ul>
+                  <li>Design a Java-based system to manage earthquake-related records.</li>
+                  <li>Apply object-oriented programming principles.</li>
+                  <li>Ensure system reliability through logical flow and validation.</li>
+                </ul>
+              </div>
+              
+              <div class="exp-loot mt-3">
+                <span class="loot-label">LOOT GAINED:</span>
+                <div class="loot-items">
+                    <span class="loot-tag">Java OOP</span>
+                    <span class="loot-tag">SQL</span>
+                    <span class="loot-tag">Debugging</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-card mb-5">
+            <div class="exp-header d-flex justify-content-between align-items-center">
+              <div>
+                <span class="exp-rank">STUDENT</span>
+                <h4 class="company-guild">DATABASE MANAGEMENT</h4>
+              </div>
+              <div class="exp-date text-end">
+                <span class="badge-date">ONGOING</span>
+              </div>
+            </div>
+
+            <div class="exp-body mt-3">
+              <div class="quest-objectives">
+                <div class="obj-title">QUEST OBJECTIVES:</div>
+                <ul>
+                  <li>Design normalized database schemas.</li>
+                  <li>Write SQL queries for data manipulation and retrieval.</li>
+                  <li>Implement constraints, keys, and relationships.</li>
+                </ul>
+              </div>
+              
+              <div class="exp-loot mt-3">
+                <span class="loot-label">LOOT GAINED:</span>
+                <div class="loot-items">
+                    <span class="loot-tag">SQL</span>
+                    <span class="loot-tag">Normalization</span>
+                    <span class="loot-tag">Server</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          </div>
+          <div class="col-12 text-center">
+              <a href="#interests" class="rpg-btn-travel">
+                  <span class="travel-text">TRAVEL TO SIDE QUEST LOG</span>
+                  <span class="travel-sub">Explore Interests</span>
+              </a>
+          </div>
+      </div>
+    </section>
+
+    
+    <!-- ================= INTERESTS SECTION ================= -->
+
+    <section id="interests" class="py-5 min-vh-100">
+      <div class="container">
+        <h2 class="rpg-title text-center mb-5">Side Quests & Interests</h2>
+        
+        <div class="notice-board p-4 p-md-5">
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="quest-note">
+                <div class="pin"></div>
+                <span class="quest-type">[GAME]</span>
+                <h3 class="quest-interest">Gaming</h3>
+                <p class="quest-lore">Grinding through digital worlds to sharpen strategy, reflexes, and problem-solving skills.</p>
+                <div class="quest-reward">Reward: +10 Nostalgia</div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="quest-note">
+                <div class="pin"></div>
+                <span class="quest-type">[CRAFTING]</span>
+                <h3 class="quest-interest">Crochet</h3>
+                <p class="quest-lore">Leveling up the “Fiber Arts” skill tree. Current focus: patience, patterns, and handmade creations.</p>
+                <div class="quest-reward">Reward: +5 Energy</div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="quest-note">
+                <div class="pin"></div>
+                <span class="quest-type">[EXPLORATION]</span>
+                <h3 class="quest-interest">Exploring Movies and Books</h3>
+                <p class="quest-lore">Exploring stories across screens and pages to unlock new perspectives and inspiration.</p>
+                <div class="quest-reward">Reward: +15 Perception</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+
+</html>

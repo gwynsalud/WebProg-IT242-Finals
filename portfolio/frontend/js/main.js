@@ -1,4 +1,3 @@
-// js/main.js
 document.addEventListener('DOMContentLoaded', () => {
     
     // MATCHING CONFIG.JS: Check if the credentials exist
@@ -18,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentPage: window.location.pathname.split("/").pop() || 'index.html',
 
                 // --- EXPLORATION / XP SYSTEM ---
-                // List of all story mode sections to track
                 allSections: [
                     'profile.html', 'training.html', 'skills.html', 'objectives.html', 
                     'archive.html', 'quests.html', 'side-quests.html', 'resources.html', 'guild.html'
@@ -31,11 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 newMessage: '',
                 submitted: false,
                 entries: [],
-                apiUrl: `${SUPABASE_URL}/rest/v1/visitors`,
+                apiUrl: '/api/guild',
 
                 // --- CLASS SELECTION DATA ---
                 selectedClass: localStorage.getItem('hero_class') || 'Scholar',
-                selectedAvatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=Scholar',
+                selectedAvatar: '', // Initialized in mounted() to avoid path mismatch
                 classes: [
                     { name: 'Warrior', icon: '⚔️', avatar: 'assets/images/warrior.png' },
                     { name: 'Mage', icon: '🪄', avatar: 'assets/images/mage.png' },
@@ -53,33 +51,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     'quests.html': 'ADVENTURE LOG',
                     'guild.html': 'GUILD HALL',
                     'bouncer.html': 'TAVERN PATROL',
-                    'modes.html': 'PATH SELECTION'
+                    'modes.html': 'PATH SELECTION',
+                    'resources.html': "SCHOLAR'S DECK"
                 };
                 return map[this.currentPage] || 'UNKNOWN REALM';
             },
 
-            // Calculates the width of the gold XP bar
             explorationProgress() {
                 if (this.allSections.length === 0) return 0;
                 const progress = (this.visitedSections.length / this.allSections.length) * 100;
                 return Math.min(progress, 100);
             },
 
-            // Dynamic Level calculation based on exploration
             currentLevel() {
-                // Level up for every 2 unique sections visited
                 const lvl = Math.floor(this.visitedSections.length / 2) + 1;
                 return lvl.toString().padStart(2, '0');
             }
         },
 
         async mounted() {
-            this.checkInitialLock();
-            this.trackExploration(); // Record current page visit
+            // FIX: Initialize the correct avatar based on the stored or default class
+            const initialJob = this.classes.find(c => c.name === this.selectedClass) || this.classes[3];
+            this.selectedAvatar = initialJob.avatar;
 
-            // Run Guestbook logic only on Guild Hall page
+            this.checkInitialLock();
+            this.trackExploration();
+
             if (this.currentPage === 'guild.html') {
                 await this.fetchEntries();
+                // Real-time listener remains for direct Supabase sync
                 if (typeof supabaseClient !== 'undefined') {
                     this.initRealtimeListener();
                 }
@@ -94,15 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         methods: {
-            // --- XP TRACKING LOGIC ---
             trackExploration() {
-                // Check if the current page is one of our tracked story sections
                 if (this.allSections.includes(this.currentPage)) {
                     if (!this.visitedSections.includes(this.currentPage)) {
                         this.visitedSections.push(this.currentPage);
                         localStorage.setItem('visited_sections', JSON.stringify(this.visitedSections));
-                        
-                        // Optional: Console log to verify progress
                         console.log(`Quest Updated: ${this.currentPage} recorded. XP: ${this.explorationProgress}%`);
                     }
                 }
@@ -143,13 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
             async fetchEntries() {
                 this.isLoading = true;
                 try {
-                    const response = await fetch(`${this.apiUrl}?select=*&order=created_at.desc`, {
-                        method: 'GET',
-                        headers: {
-                            'apikey': SUPABASE_ANON_KEY,
-                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-                        }
-                    });
+                    // Optimized for NestJS: No longer need to send Supabase keys in headers
+                    const response = await fetch(this.apiUrl);
                     if (!response.ok) throw new Error('API fetch failed');
                     this.entries = await response.json();
                 } catch (err) { 
@@ -164,14 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 this.submitted = true;
                 try {
-                    const response = await fetch(this.apiUrl, {
+                    const response = await fetch(`${this.apiUrl}/sign`, {
                         method: 'POST',
-                        headers: { 
-                            'Content-Type': 'application/json',
-                            'apikey': SUPABASE_ANON_KEY,
-                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                            'Prefer': 'return=representation' 
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             name: this.newName,
                             message: this.newMessage,
@@ -183,6 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (response.ok) {
                         this.newName = ''; 
                         this.newMessage = '';
+                        // Refresh list after signing
                         await this.fetchEntries();
                         setTimeout(() => { this.submitted = false; }, 3000);
                     } else {
@@ -190,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 } catch (err) { 
                     this.submitted = false; 
-                    alert("The ledger is sealed!"); 
+                    alert("The ledger is sealed! (Server Error)"); 
                     console.error(err);
                 }
             },
@@ -198,14 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
             formatDate(dateString) {
                 if (!dateString) return "Ancient Time";
                 const date = new Date(dateString);
-                const options = { month: 'short', day: 'numeric', year: 'numeric' };
-                const datePart = date.toLocaleDateString(undefined, options);
-                const timePart = date.toLocaleTimeString(undefined, { 
-                    hour: '2-digit', 
-                    minute: '2-digit', 
-                    hour12: false 
-                });
-                return `${datePart} @ ${timePart}`;
+                return date.toLocaleDateString(undefined, { 
+                    month: 'short', day: 'numeric', year: 'numeric' 
+                }) + ` @ ${date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', hour12: false })}`;
             },
 
             initRealtimeListener() {
