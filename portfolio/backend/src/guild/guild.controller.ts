@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { GuildService } from './guild.service';
 
-@Controller('guild') // This makes the URL: /api/guild
+@Controller('guild')
 export class GuildController {
   constructor(private readonly guildService: GuildService) {}
 

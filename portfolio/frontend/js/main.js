@@ -1,4 +1,3 @@
-// js/main.js
 document.addEventListener('DOMContentLoaded', () => {
     
     // MATCHING CONFIG.JS: Check if the credentials exist

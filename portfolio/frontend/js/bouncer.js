@@ -1,9 +1,3 @@
-/**
- * bouncer.js
- * Extends the global rootConfig with Tavern Patrol game logic.
- * Features: Dynamic boundary detection & Aggressive score-based scaling.
- */
-
 document.addEventListener('DOMContentLoaded', () => {
     if (!window.rootConfig) {
         console.error("Global rootConfig not found. Make sure main.js is loaded before bouncer.js.");
@@ -23,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         npcIdCounter: 0,
         gameLoopInterval: null,
         spawnRate: 0.03,
-        // Internal tracking for boundaries
         stageWidth: 1000,
         stageHeight: 500
     };

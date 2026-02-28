@@ -19,119 +19,115 @@
 </head>
 
 <body>
+  <div id="app" v-cloak>
+  
+    <!-- ================= START MENU ================= -->
 
-    <div id="app" v-cloak>
-
+    <section id="start-menu" class="vh-100 d-flex flex-column justify-content-center align-items-center text-center">
     
-      <!-- ================= START MENU ================= -->
+      <div class="scanlines"></div>
 
-  <section id="start-menu" class="vh-100 d-flex flex-column justify-content-center align-items-center text-center">
-  
-    <div class="scanlines"></div>
-
-    <div class="menu-content">
-      <h1 class="rpg-title">THE LAST COMMIT</h1>
-      <h2 class="rpg-subtitle">A Full-Stack Adventure</h2>
-      <p class="pixel-text">Press Start to Begin</p>
-      <a href="#characters" class="rpg-btn-gold">START GAME</a>
-    </div>
-
-  </section>
-  
-
-  <!-- ================= CHARACTER SELECTION SECTION ================= -->
-  
-  <section id="characters" class="min-vh-100 d-flex align-items-center py-5">
-    <div class="container">
-      <div class="row align-items-start justify-content-center g-4 g-lg-5">
-
-        <div class="col-md-5 d-flex flex-column align-items-center">
-          <h2 class="rpg-title section-header mb-3">Character Selection</h2>
-
-          <div class="character-grid mt-3">
-            <div class="card character-profile unlocked active">
-              <div class="profile-img-wrapper">
-                <img src="assets/images/character1.png" alt="Character 1">
-              </div>
-              <div class="rpg-card-label">Gwen</div>
-            </div>
-
-            <div class="card character-profile locked">
-              <div class="profile-img-wrapper">
-                <img src="assets/images/character_locked.png" alt="Locked">
-              </div>
-              <div class="rpg-card-label">???</div>
-            </div>
-
-            <div class="card character-profile locked">
-              <div class="profile-img-wrapper">
-                <img src="assets/images/character_locked.png" alt="Locked">
-              </div>
-              <div class="rpg-card-label">???</div>
-            </div>
-
-            <div class="card character-profile locked">
-              <div class="profile-img-wrapper">
-                <img src="assets/images/character_locked.png" alt="Locked">
-              </div>
-              <div class="rpg-card-label">???</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-7 d-flex flex-column align-items-center justify-content-center">
-          
-          <div class="character-sheet w-100 p-3 p-md-4">
-            <div class="d-flex flex-column flex-xl-row align-items-center justify-content-center gap-4">
-              
-              <div class="character-preview-window">
-                <img src="assets/images/character1_fullbody.png" alt="Character body" class="img-fluid character-body">
-                <div class="shadow-oval"></div> 
-              </div>
-
-              <div class="stats-panel flex-grow-1">
-                <h3 class="stat-header">PLAYER STATS</h3>
-                
-                <div class="stat-row">
-                  <span class="stat-label">STR</span>
-                  <div class="hp-bar-container">
-                    <div class="hp-fill" style="width: 85%; background-color: #ff4757;"></div>
-                  </div>
-                </div>
-                
-                <div class="stat-row">
-                  <span class="stat-label">AGI</span>
-                  <div class="hp-bar-container">
-                    <div class="hp-fill" style="width: 95%; background-color: #3498db;"></div>
-                  </div>
-                </div>
-
-                <div class="stat-row">
-                  <span class="stat-label">INT</span>
-                  <div class="hp-bar-container">
-                    <div class="hp-fill" style="width: 70%; background-color: #f1c40f;"></div>
-                  </div>
-                </div>
-
-                <div class="lore-box mt-3 border-top pt-3">
-                  <p class="lore-text">GWYNETH C. SALUD</p>
-                  <p class="lore-text"><span class="text-warning">ORIGIN:</span> PHILIPPINES</p>
-                  <p class="lore-text"><span class="text-warning">WEAPON:</span> LAPPY</p>
-                  <p class="lore-text"><span class="text-warning">GUILD:</span> <a href="https://linkedin.com/in/gwyneth-salud" class="text-white">LINKEDIN</a></p>
-                  <p class="lore-text"><span class="text-warning">QUEST:</span> GRADUATE COLLEGE</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <a href="modes.html" class="rpg-btn-gold mt-4" id="confirm-character">CONFIRM</a>
-        </div>
-
+      <div class="menu-content">
+        <h1 class="rpg-title">THE LAST COMMIT</h1>
+        <h2 class="rpg-subtitle">A Full-Stack Adventure</h2>
+        <p class="pixel-text">Press Start to Begin</p>
+        <a href="#characters" class="rpg-btn-gold">START GAME</a>
       </div>
-    </div>
-  </section>
-  </div>
 
+    </section>
+    
+    <!-- ================= CHARACTER SELECTION SECTION ================= -->
+    
+    <section id="characters" class="min-vh-100 d-flex align-items-center py-5">
+      <div class="container">
+        <div class="row align-items-start justify-content-center g-4 g-lg-5">
+
+          <div class="col-md-5 d-flex flex-column align-items-center">
+            <h2 class="rpg-title section-header mb-3">Character Selection</h2>
+
+            <div class="character-grid mt-3">
+              <div class="card character-profile unlocked active">
+                <div class="profile-img-wrapper">
+                  <img src="assets/images/character1.png" alt="Character 1">
+                </div>
+                <div class="rpg-card-label">Gwen</div>
+              </div>
+
+              <div class="card character-profile locked">
+                <div class="profile-img-wrapper">
+                  <img src="assets/images/character_locked.png" alt="Locked">
+                </div>
+                <div class="rpg-card-label">???</div>
+              </div>
+
+              <div class="card character-profile locked">
+                <div class="profile-img-wrapper">
+                  <img src="assets/images/character_locked.png" alt="Locked">
+                </div>
+                <div class="rpg-card-label">???</div>
+              </div>
+
+              <div class="card character-profile locked">
+                <div class="profile-img-wrapper">
+                  <img src="assets/images/character_locked.png" alt="Locked">
+                </div>
+                <div class="rpg-card-label">???</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-7 d-flex flex-column align-items-center justify-content-center">
+            
+            <div class="character-sheet w-100 p-3 p-md-4">
+              <div class="d-flex flex-column flex-xl-row align-items-center justify-content-center gap-4">
+                
+                <div class="character-preview-window">
+                  <img src="assets/images/character1_fullbody.png" alt="Character body" class="img-fluid character-body">
+                  <div class="shadow-oval"></div> 
+                </div>
+
+                <div class="stats-panel flex-grow-1">
+                  <h3 class="stat-header">PLAYER STATS</h3>
+                  
+                  <div class="stat-row">
+                    <span class="stat-label">STR</span>
+                    <div class="hp-bar-container">
+                      <div class="hp-fill" style="width: 85%; background-color: #ff4757;"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="stat-row">
+                    <span class="stat-label">AGI</span>
+                    <div class="hp-bar-container">
+                      <div class="hp-fill" style="width: 95%; background-color: #3498db;"></div>
+                    </div>
+                  </div>
+
+                  <div class="stat-row">
+                    <span class="stat-label">INT</span>
+                    <div class="hp-bar-container">
+                      <div class="hp-fill" style="width: 70%; background-color: #f1c40f;"></div>
+                    </div>
+                  </div>
+
+                  <div class="lore-box mt-3 border-top pt-3">
+                    <p class="lore-text">GWYNETH C. SALUD</p>
+                    <p class="lore-text"><span class="text-warning">ORIGIN:</span> PHILIPPINES</p>
+                    <p class="lore-text"><span class="text-warning">WEAPON:</span> LAPPY</p>
+                    <p class="lore-text"><span class="text-warning">GUILD:</span> <a href="https://linkedin.com/in/gwyneth-salud" class="text-white">LINKEDIN</a></p>
+                    <p class="lore-text"><span class="text-warning">QUEST:</span> GRADUATE COLLEGE</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <a href="modes.html" class="rpg-btn-gold mt-4" id="confirm-character">CONFIRM</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </div>
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
