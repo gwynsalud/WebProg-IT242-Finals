@@ -42,15 +42,28 @@ A high-fidelity, pixel-art inspired web portfolio designed as an interactive RPG
 ## 📂 Project Structure
 
 ```text
-├── backend/                # NestJS Application
+├── backend/                        # NestJS Server
 │   ├── src/
-│   │   ├── guild/          # Guild Ledger Module, Controller, and Service
-│   │   └── main.ts         # API Entry point with Global Prefix and CORS
-│   └── package.json        # Backend dependencies (@nestjs/config, supabase-js)
-├── frontend/               # Static Assets & RPG Client
-│   ├── js/
-│   │   ├── main.js         # XP Tracking and Frontend API logic
-│   │   └── resources.js    # Scholar's Deck filtering logic
-│   ├── css/                # Custom RPG and Pixel-art stylesheets
-│   └── *.html              # Game screens (index, profile, guild, resources)
-└── vercel.json             # Monorepo routing and deployment configuration
+│   │   ├── guild/                  # The Guild Ledger Feature
+│   │   │   ├── guild.module.ts     # Wiring for the Guild feature
+│   │   │   ├── guild.controller.ts # API Endpoints (@Get, @Post)
+│   │   │   └── guild.service.ts    # Supabase logic & OnModuleInit
+│   │   ├── app.module.ts           # Root module with ConfigModule
+│   │   └── main.ts                 # Entry point with /api prefix
+│   ├── .env                        # Local API secrets (ignored)
+│   ├── nest-cli.json               # NestJS configuration
+│   └── package.json                # Backend dependencies
+├── frontend/                       # RPG Client Interface
+│   ├── assets/                     # gifs, icons, images
+│   ├── css/                        # bouncer.css, resources.css, style.css
+│   ├── js/                         # bouncer.js, config.js, main.js, resources.js
+│   ├── bouncer.html                # Tavern mini-game
+│   ├── guild.html                  # Guestbook interface
+│   ├── index.html                  # Title & Character Select
+│   ├── modes.html                  # Path selection
+│   ├── profile.html                # Story Mode & XP HUD
+│   ├── quests.html                 # Quest log
+│   └── resources.html              # The Scholar's Deck
+├── vercel.json                     # Monorepo routing & builds
+├── .gitignore                      # Security rules for .env & dist
+└── package.json                    # Root manifest

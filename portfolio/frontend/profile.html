@@ -25,37 +25,37 @@
 
   <div class="hud-trigger-zone"></div>
     <nav class="story-hud bg-black border-pixel-bottom">
-    <div class="container-fluid px-4">
-      <div class="d-flex align-items-center justify-content-between py-2">
-        <div class="story-nav-scroll d-flex gap-2">
-          <a href="profile.html#about" class="story-nav-item">PROFILE</a>
-          <a href="profile.html#education" class="story-nav-item">TRAINING</a>
-          <a href="profile.html#skills" class="story-nav-item">SKILLS</a>
-          <a href="profile.html#goals" class="story-nav-item">OBJECTIVES</a>
-          <a href="profile.html#gallery" class="story-nav-item">ARCHIVE</a>
-          <a href="quests.html#experience" class="story-nav-item">QUESTS</a>
-          <a href="quests.html#interests" class="story-nav-item">SIDE QUESTS</a>
-          <a href="resources.html" class="story-nav-item">RESOURCES</a>
-          <a href="guild.html" class="story-nav-item">GUILD</a>
-        </div>
-      </div>
-
-      <div v-if="!['guild.html', 'bouncer.html'].includes(currentPage)" 
-          class="xp-container pb-2 d-flex align-items-center gap-3">
-        
-        <span class="quest-label" style="font-size: 0.5rem; color: #ffc107;">XP</span>
-        
-        <div class="xp-bar-bg border-pixel-sm w-100" style="height: 10px; background: #222;">
-          <div class="xp-bar-fill" 
-              :style="{ width: explorationProgress + '%' }" 
-              style="height: 100%; background: #ffc107; box-shadow: inset -4px 0 0 #b8860b; transition: width 0.5s ease-out;">
+      <div class="container-fluid px-4">
+        <div class="d-flex align-items-center justify-content-between py-2">
+          <div class="story-nav-scroll d-flex gap-2">
+            <a href="profile.html#about" class="story-nav-item">PROFILE</a>
+            <a href="profile.html#education" class="story-nav-item">TRAINING</a>
+            <a href="profile.html#skills" class="story-nav-item">SKILLS</a>
+            <a href="profile.html#goals" class="story-nav-item">OBJECTIVES</a>
+            <a href="profile.html#gallery" class="story-nav-item">ARCHIVE</a>
+            <a href="quests.html#experience" class="story-nav-item">QUESTS</a>
+            <a href="quests.html#interests" class="story-nav-item">SIDE QUESTS</a>
+            <a href="resources.html" class="story-nav-item">RESOURCES</a>
+            <a href="guild.html" class="story-nav-item">GUILD</a>
           </div>
         </div>
-        
-        <span class="quest-label" style="font-size: 0.5rem; white-space: nowrap;">LVL {{ currentLevel }}</span>
+
+        <div v-if="!['guild.html', 'bouncer.html'].includes(currentPage)" 
+            class="xp-container pb-2 d-flex align-items-center gap-3">
+          
+          <span class="quest-label" style="font-size: 0.5rem; color: #ffc107;">XP</span>
+          
+          <div class="xp-bar-bg border-pixel-sm w-100" style="height: 10px; background: #222;">
+            <div class="xp-bar-fill" 
+                :style="{ width: explorationProgress + '%' }" 
+                style="height: 100%; background: #ffc107; box-shadow: inset -4px 0 0 #b8860b; transition: width 0.5s ease-out;">
+            </div>
+          </div>
+          
+          <span class="quest-label" style="font-size: 0.5rem; white-space: nowrap;">LVL {{ currentLevel }}</span>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
       <button class="pause-btn" v-on:click="togglePause">
       <span v-if="!isPaused">〓 MENU</span>
