@@ -13,8 +13,6 @@ async function bootstrap() {
   // to make fetch requests to this backend without being blocked by the browser.
   app.enableCors();
 
-  app.useGlobalFilters(new CatchEverythingFilter());
-
   // 3. Port Configuration: Vercel injects a PORT environment variable. 
   // We use 3000 as a fallback for your local Codespaces testing.
   await app.listen(process.env.PORT || 3000);

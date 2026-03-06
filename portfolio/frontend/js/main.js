@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // --- CLASS SELECTION DATA ---
                 selectedClass: localStorage.getItem('hero_class') || 'Scholar',
-                selectedAvatar: '', // Initialized in mounted()
+                selectedAvatar: '', // Initialized in mounted() to avoid path mismatch
                 classes: [
                     { name: 'Warrior', icon: '⚔️', avatar: 'assets/images/warrior.png' },
                     { name: 'Mage', icon: '🪄', avatar: 'assets/images/mage.png' },
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         async mounted() {
-            // FIX: Initialize correct avatar
+            // FIX: Initialize the correct avatar based on the stored or default class
             const initialJob = this.classes.find(c => c.name === this.selectedClass) || this.classes[3];
             this.selectedAvatar = initialJob.avatar;
 
@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (this.currentPage === 'guild.html') {
                 await this.fetchEntries();
+                // Real-time listener remains for direct Supabase sync
                 if (typeof supabaseClient !== 'undefined') {
                     this.initRealtimeListener();
                 }
@@ -98,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!this.visitedSections.includes(this.currentPage)) {
                         this.visitedSections.push(this.currentPage);
                         localStorage.setItem('visited_sections', JSON.stringify(this.visitedSections));
+                        console.log(`Quest Updated: ${this.currentPage} recorded. XP: ${this.explorationProgress}%`);
                     }
                 }
             },
@@ -137,17 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
             async fetchEntries() {
                 this.isLoading = true;
                 try {
+                    // Optimized for NestJS: No longer need to send Supabase keys in headers
                     const response = await fetch(this.apiUrl);
-                    
-                    // Technical Clean-up: Catching formatted backend errors
-                    if (!response.ok) {
-                        const errData = await response.json();
-                        throw new Error(errData.message || 'The Archive is currently unreachable.');
-                    }
-
+                    if (!response.ok) throw new Error('API fetch failed');
                     this.entries = await response.json();
                 } catch (err) { 
-                    console.error("Ledger fetch failed:", err.message); 
+                    console.error("Ledger fetch failed:", err); 
                 } finally {
                     setTimeout(() => { this.isLoading = false; }, 500);
                 }
@@ -172,16 +169,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (response.ok) {
                         this.newName = ''; 
                         this.newMessage = '';
+                        // Refresh list after signing
                         await this.fetchEntries();
                         setTimeout(() => { this.submitted = false; }, 3000);
                     } else {
-                        // Handle RPG-themed error from our Global Filter
-                        const errData = await response.json();
-                        throw new Error(errData.message || 'Critical Miss! Entry failed.');
+                        throw new Error('Post failed');
                     }
                 } catch (err) { 
                     this.submitted = false; 
-                    alert(`GUILD ERROR: ${err.message}`); 
+                    alert("The ledger is sealed! (Server Error)"); 
                     console.error(err);
                 }
             },
@@ -228,6 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // --- MOUNT LOGIC ---
     const isBouncerPage = window.location.pathname.includes('bouncer.html');
     if (!isBouncerPage) {
         Vue.createApp(window.rootConfig).mount('#app');
